@@ -83,7 +83,7 @@ public class MoonGrid : MonoBehaviour
         //skip eves
         var isEvenX = xy.x % 2 == 0;
         var isEvenY = xy.y % 2 == 0;
-        if (isEvenX && isEvenY) return false;
+        //if (isEvenX && isEvenY) return false;
         //for editor
         if (_cells == null) return true;
         var tile = GetCell(xy);
