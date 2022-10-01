@@ -10,10 +10,13 @@ public class GridCell : MonoBehaviour
     public bool Highlighted;
     public bool Busy;
 
+    public bool HasRoad => Road != null;
+
+    public RoadTile Road = null;
+
     public IGridElement Element;
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log(other);
         var tileElement = other.GetComponent<IGridElement>();
         if (tileElement != null)
         {
@@ -33,4 +36,11 @@ public class GridCell : MonoBehaviour
 
     }
 
+    private void Update()
+    {
+        if (HasRoad)
+        {
+            Road.transform.position = transform.position;
+        }
+    }
 }
