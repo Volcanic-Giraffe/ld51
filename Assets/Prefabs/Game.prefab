@@ -206,10 +206,17 @@ MonoBehaviour:
   - {fileID: 6354120432888080250, guid: 22658c3522f80be449bedf336638f716, type: 3}
   - {fileID: 6354120432888080250, guid: 9e8771481f9b4ed47b91082159e87f27, type: 3}
   - {fileID: 6354120432888080250, guid: 6f9621b1b9dd2514d81e96721309cb19, type: 3}
-  WagonPrefab: {fileID: 3943951321770607729, guid: e931ea3e3c28f044dace2b739feabdbb,
-    type: 3}
-  LocomotivePrefab: {fileID: 4617641503745263747, guid: 980b695d164a67f49939a2a9377d9f85,
-    type: 3}
+  WagonPrefabs:
+  - Type: 0
+    Wagon: {fileID: 4617641503745263747, guid: 980b695d164a67f49939a2a9377d9f85, type: 3}
+  - Type: 1
+    Wagon: {fileID: 3943951321770607729, guid: e931ea3e3c28f044dace2b739feabdbb, type: 3}
+  - Type: 2
+    Wagon: {fileID: 1185076814134669511, guid: 578d226150a74164098efa3c7fe2e8df, type: 3}
+  - Type: 3
+    Wagon: {fileID: 500996488675293276, guid: 92e5edd0c10ee324fa7032e83df483a7, type: 3}
+  WagonPrefab: {fileID: 0}
+  LocomotivePrefab: {fileID: 0}
 --- !u!1001 &9089180748965263666
 PrefabInstance:
   m_ObjectHideFlags: 0

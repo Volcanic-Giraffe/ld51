@@ -1,5 +1,6 @@
 ﻿
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -11,6 +12,9 @@ public class GameController : MonoBehaviour
     private Camera _camera;
 
     public RoadTile[] RoadTilePrefabs;
+
+    public List<WagonPrefab> WagonPrefabs;
+
     public Wagon WagonPrefab;
     public Wagon LocomotivePrefab;
 
@@ -128,31 +132,28 @@ public class GameController : MonoBehaviour
     {
         if (Mode == GameMode.Sort) return;
         Mode = GameMode.Sort;
-        Spawn();
+        SpawnTrain();
     }
 
-    private void Spawn()
+    private void SpawnTrain()
     {
         if (Mode == GameMode.Build) return;
-        Invoke(nameof(Spawn), 10.0f);
+        Invoke(nameof(SpawnTrain), 10.0f);
 
-        var newTrain = ProduceLocomotive();
+        var newTrain = ProduceWagon(WagonType.Locomotive);
         newTrain.transform.position = MoonGrid.Instance.CenterOfTile(MoonGrid.Instance.EnterPoint + Vector2Int.left * 3);
 
-        for (int i = 0; i < 3; i++)
+        var types = new List<WagonType>() { WagonType.Red, WagonType.Green, WagonType.Blue };
+
+        foreach (var wType in types)
         {
-            newTrain.AddNewWagon();
+            newTrain.AddNewWagon(wType);
         }
     }
 
-    public Wagon ProduceWagon()
+    public Wagon ProduceWagon(WagonType type)
     {
-        return Instantiate(WagonPrefab, transform);
-    }
-
-    public Wagon ProduceLocomotive()
-    {
-        return Instantiate(LocomotivePrefab, transform);
+        return Instantiate(WagonPrefabs.Find(p => p.Type == type).Wagon, transform);
     }
 
     private void RecalculateRoads()
