@@ -14,7 +14,11 @@ public class RoadTile : MonoBehaviour
     private void Awake()
     {
         RoadSwitch = GetComponentInChildren<RoadSwitch>();
-        RoadSwitch.SetAllowedConnections(Type);
+    }
+
+    private void Start()
+    {
+        if (RoadSwitch != null) RoadSwitch.SetAllowedConnections(Type);
     }
     public Vector2Int Direction(Vector2Int from, Vagon vagon = null)
     {
@@ -40,8 +44,11 @@ public class RoadTile : MonoBehaviour
                 if (from == Vector2Int.up) return Vector2Int.right;
                 if (from == Vector2Int.right) return Vector2Int.up;
                 break;
-            // TODO control by click
             case ConnectionType.TripleDLU:
+            case ConnectionType.TripleLUR:
+            case ConnectionType.TripleRDL:
+            case ConnectionType.TripleURD:
+            case ConnectionType.Quad:
                 if (RoadSwitch.Direction != from) return RoadSwitch.Direction;
                 break;
         }

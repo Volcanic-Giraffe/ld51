@@ -3,38 +3,53 @@ using UnityEngine;
 
 public class RoadSwitch : MonoBehaviour
 {
-    public Vector2Int Direction;
+    Vector2Int _direction;
     private ConnectionType connection;
+    private SpriteRenderer _sr;
 
-    private void Start()
+    public Vector2Int Direction { get => _direction; }
+
+    private void Awake()
     {
-        if (Math.Abs(Direction.x + Direction.y) != 1) Direction = Vector2Int.up;
+        _sr = GetComponent<SpriteRenderer>();
+        _direction = Vector2Int.right;
     }
+
+    void OnMouseDown()
+    {
+        Toggle();
+    }
+
     public void Toggle()
     {
-        if (Direction == Vector2Int.up)
+        if (_direction == Vector2Int.up)
         {
-            Direction = connection == ConnectionType.TripleDLU ? Vector2Int.down : Direction = Vector2Int.right;
+            _direction = connection == ConnectionType.TripleDLU ? Vector2Int.down : _direction = Vector2Int.right;
         }
-        else if (Direction == Vector2Int.right)
+        else if (_direction == Vector2Int.right)
         {
-            Direction = connection == ConnectionType.TripleLUR ? Vector2Int.left : Direction = Vector2Int.down;
+            _direction = connection == ConnectionType.TripleLUR ? Vector2Int.left : _direction = Vector2Int.down;
         }
-        else if (Direction == Vector2Int.down)
+        else if (_direction == Vector2Int.down)
         {
-            Direction = connection == ConnectionType.TripleURD ? Vector2Int.up : Vector2Int.left;
+            _direction = connection == ConnectionType.TripleURD ? Vector2Int.up : Vector2Int.left;
         }
         else
         {
-            Direction = connection == ConnectionType.TripleRDL ? Vector2Int.right : Vector2Int.up;
+            _direction = connection == ConnectionType.TripleRDL ? Vector2Int.right : Vector2Int.up;
         }
-        // TODO ROTATE ARROW
+        float angle = Mathf.Atan2(_direction.y, _direction.x) * Mathf.Rad2Deg;
+        _sr.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
     }
     internal void SetAllowedConnections(ConnectionType conn)
     {
-        if (connection != ConnectionType.TripleURD && connection != ConnectionType.TripleDLU
-            && connection != ConnectionType.TripleLUR && connection != ConnectionType.TripleRDL
-            && connection != ConnectionType.Quad) throw new Exception($"Switch can only operate on triple/quad connectors, {gameObject}");
-        this.connection = conn;
+        if (conn != ConnectionType.TripleURD && conn != ConnectionType.TripleDLU
+            && conn != ConnectionType.TripleLUR && conn != ConnectionType.TripleRDL
+            && conn != ConnectionType.Quad)
+        {
+            throw new Exception($"Switch can only operate on triple/quad connectors, {gameObject.transform.parent}");
+        }
+        connection = conn;
+        if (connection == ConnectionType.TripleDLU) Toggle();
     }
 }
