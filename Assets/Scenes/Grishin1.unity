@@ -512,7 +512,9 @@ MonoBehaviour:
   - {fileID: 6354120432888080250, guid: 22658c3522f80be449bedf336638f716, type: 3}
   - {fileID: 6354120432888080250, guid: 9e8771481f9b4ed47b91082159e87f27, type: 3}
   - {fileID: 6354120432888080250, guid: 6f9621b1b9dd2514d81e96721309cb19, type: 3}
-  VagonPrefab: {fileID: 3943951321770607729, guid: e931ea3e3c28f044dace2b739feabdbb,
+  VagonPrefab: {fileID: 4617641503745263747, guid: 980b695d164a67f49939a2a9377d9f85,
+    type: 3}
+  LocomotivePrefab: {fileID: 4617641503745263747, guid: 980b695d164a67f49939a2a9377d9f85,
     type: 3}
 --- !u!1001 &295226002
 PrefabInstance:

@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class Vagon : MonoBehaviour
 {
+    [SerializeField] private Transform Rotator;
+    
     private Rigidbody _rigidBody;
 
     public float Speed;
@@ -57,8 +59,9 @@ public class Vagon : MonoBehaviour
         newLoc.z = 0;
         _rigidBody.MovePosition(newLoc);
             
-        //TODO: Я ЕБАЛ КВАТЕРНИОНЫ
-        _rigidBody.MoveRotation(Quaternion.LookRotation(newLoc - transform.position) * Quaternion.Euler(0, -90, 0));
+        var dir = targetCell - transform.position;
+        float angleS = Vector3.SignedAngle(dir, transform.right, -Vector3.forward);
 
+        Rotator.eulerAngles = new Vector3(0, 0, angleS);
     } 
 }

@@ -12,6 +12,7 @@ public class GameController : MonoBehaviour
 
     public RoadTile[] RoadTilePrefabs;
     public Vagon VagonPrefab;
+    public Vagon LocomotivePrefab;
 
     private void Awake()
     {
@@ -135,7 +136,7 @@ public class GameController : MonoBehaviour
         if (Mode == GameMode.Build) return;
         Invoke(nameof(Spawn), 10.0f);
 
-        var newVagon = Instantiate(VagonPrefab, transform);
+        var newVagon = Instantiate(LocomotivePrefab, transform);
         newVagon.transform.position =
             MoonGrid.Instance.CenterOfTile(MoonGrid.Instance.EnterPoint + Vector2Int.left * 3);
 
