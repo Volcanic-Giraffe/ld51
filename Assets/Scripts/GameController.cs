@@ -136,10 +136,23 @@ public class GameController : MonoBehaviour
         if (Mode == GameMode.Build) return;
         Invoke(nameof(Spawn), 10.0f);
 
-        var newVagon = Instantiate(LocomotivePrefab, transform);
-        newVagon.transform.position =
-            MoonGrid.Instance.CenterOfTile(MoonGrid.Instance.EnterPoint + Vector2Int.left * 3);
+        var newTrain = ProduceLocomotive();
+        newTrain.transform.position = MoonGrid.Instance.CenterOfTile(MoonGrid.Instance.EnterPoint + Vector2Int.left * 3);
 
+        for (int i = 0; i < 3; i++)
+        {
+            newTrain.AddNewWagon();
+        }
+    }
+
+    public Wagon ProduceWagon()
+    {
+        return Instantiate(WagonPrefab, transform);
+    }
+
+    public Wagon ProduceLocomotive()
+    {
+        return Instantiate(LocomotivePrefab, transform);
     }
 
     private void RecalculateRoads()

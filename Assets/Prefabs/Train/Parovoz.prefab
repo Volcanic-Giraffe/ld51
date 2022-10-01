@@ -86,6 +86,12 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 575404743497624080, guid: a91a346f453ee164b9c3e7c809ff6cba,
+        type: 3}
+      propertyPath: WagonPrefab
+      value: 
+      objectReference: {fileID: 3943951321770607729, guid: e931ea3e3c28f044dace2b739feabdbb,
+        type: 3}
     - target: {fileID: 3373622222420428936, guid: a91a346f453ee164b9c3e7c809ff6cba,
         type: 3}
       propertyPath: m_RootOrder

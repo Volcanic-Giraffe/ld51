@@ -133,7 +133,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 757156fd401b8844aa7a64eb356e2f03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  WagonPrefab: {fileID: 0}
   Rotator: {fileID: 7728094142624802244}
+  NextWagon: {fileID: 0}
   Speed: 3
   Direction: {x: 1, y: 0}
 --- !u!1001 &3373622220726414922

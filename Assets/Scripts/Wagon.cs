@@ -7,8 +7,11 @@ using UnityEngine;
 public class Wagon : MonoBehaviour
 {
     public const float LinkLength = 1.5f;
-    
+
     [SerializeField] private Transform Rotator;
+
+    public Wagon FrontWagon;
+    public Wagon RearWagon;
     
     private Rigidbody _rigidBody;
 
@@ -65,5 +68,30 @@ public class Wagon : MonoBehaviour
         float angleS = Vector3.SignedAngle(dir, transform.right, -Vector3.forward);
 
         Rotator.eulerAngles = new Vector3(0, 0, angleS);
-    } 
+    }
+
+    public void AddNewWagon()
+    {
+        var lastWagon = LastWagon();
+
+        var pos = lastWagon.transform.position;
+        
+        var newWagon = GameController.Instance.ProduceWagon();
+        newWagon.FrontWagon = lastWagon;
+        lastWagon.RearWagon = newWagon;
+
+        newWagon.transform.position = new Vector3(pos.x - LinkLength, pos.y, 0f);
+    }
+
+    public Wagon LastWagon()
+    {
+        if (RearWagon != null)
+        {
+            return RearWagon.LastWagon();
+        }
+        else
+        {
+            return this;
+        }
+    }
 }
