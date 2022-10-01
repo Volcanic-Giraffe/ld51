@@ -11,12 +11,11 @@ public class UnloadingStation : MonoBehaviour
     {
         if (other.CompareTag("Wagon"))
         {
-            var train = other.GetComponentInParent<Wagon>();
-            var lastWagon = train.LastWagon();
+            var wagon = other.GetComponentInParent<Wagon>();
 
-            if (lastWagon.WagonType == WagonType)
+            if (wagon.WagonType == WagonType && wagon.IsLastWagon())
             {
-                lastWagon.RemoveFromTrain();
+                wagon.RemoveFromTrain();
             }
         }
     }
