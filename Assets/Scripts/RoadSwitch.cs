@@ -6,6 +6,10 @@ public class RoadSwitch : MonoBehaviour
     public Vector2Int Direction;
     private ConnectionType connection;
 
+    private void Start()
+    {
+        if (Math.Abs(Direction.x + Direction.y) != 1) Direction = Vector2Int.up;
+    }
     public void Toggle()
     {
         if (Direction == Vector2Int.up)

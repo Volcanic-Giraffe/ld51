@@ -9,10 +9,11 @@ public enum ConnectionType
 public class RoadTile : MonoBehaviour
 {
     public ConnectionType Type;
-    public RoadSwitch RoadSwitch;
+    RoadSwitch RoadSwitch;
 
     private void Awake()
     {
+        RoadSwitch = GetComponentInChildren<RoadSwitch>();
         RoadSwitch.SetAllowedConnections(Type);
     }
     public Vector2Int Direction(Vector2Int from, Vagon vagon = null)
