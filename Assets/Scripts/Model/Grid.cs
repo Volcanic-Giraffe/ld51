@@ -3,6 +3,7 @@ using System;
 using JetBrains.Annotations;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class Grid : MonoBehaviour
 {
@@ -12,7 +13,7 @@ public class Grid : MonoBehaviour
     public int Width;
     public int Height;
 
-    public Tile TilePrefab;
+    public GridCell GridCellPrefab;
 
     private void Awake()
     {
@@ -20,18 +21,18 @@ public class Grid : MonoBehaviour
         _camera = Camera.main;
     }
 
-    private Tile[,] _tiles;
+    private GridCell[,] _tiles;
     private Camera _camera;
 
     private void Start()
     {
         
-        _tiles = new Tile[Width, Height];
+        _tiles = new GridCell[Width, Height];
         for (int x = 0; x < Width; x++)
         {
             for (int y = 0; y < Height; y++)
             {
-                var tile = Instantiate(TilePrefab, transform);
+                var tile = Instantiate(GridCellPrefab, transform);
                 tile.transform.localPosition = new Vector3(x + 0.5f, y + 0.5f, 0);
                 _tiles[x, y] = tile;
             }
@@ -64,7 +65,7 @@ public class Grid : MonoBehaviour
     }
 
     [CanBeNull]
-    public Tile GetTile(Vector2Int xy)
+    public GridCell GetTile(Vector2Int xy)
     {
         if (xy.x < 0 || xy.y < 0) return null;
         if (xy.x >= Width || xy.y >= Height) return null;
