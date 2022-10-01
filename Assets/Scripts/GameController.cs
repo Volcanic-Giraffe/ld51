@@ -143,7 +143,7 @@ public class GameController : MonoBehaviour
         var newTrain = ProduceWagon(WagonType.Locomotive);
         newTrain.transform.position = MoonGrid.Instance.CenterOfTile(MoonGrid.Instance.EnterPoint + Vector2Int.left * 3);
 
-        var types = new List<WagonType>() { WagonType.Red, WagonType.Green, WagonType.Blue };
+        var types = new List<WagonType>() { WagonType.Green, WagonType.Blue, WagonType.Red };
 
         foreach (var wType in types)
         {

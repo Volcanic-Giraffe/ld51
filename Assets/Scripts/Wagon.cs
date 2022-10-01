@@ -96,4 +96,27 @@ public class Wagon : MonoBehaviour
             return this;
         }
     }
+
+    public void RemoveFromTrain()
+    {
+        if (RearWagon != null)
+        {
+            RearWagon.FrontWagon = FrontWagon;
+        }
+
+        if (FrontWagon != null)
+        {
+            FrontWagon.RearWagon = RearWagon;
+        }
+
+        // todo: move positions on tail wagons
+        // todo: add score!
+
+        Destroy(gameObject);
+    }
+
+    public bool IsLastWagon()
+    {
+        return RearWagon == null;
+    }
 }
