@@ -54,8 +54,11 @@ public class Vagon : MonoBehaviour
 
         var targetCell = MoonGrid.Instance.CenterOfTile(myXY + Direction);
         var newLoc = transform.position + (targetCell - transform.position).normalized * (Speed * Time.fixedDeltaTime);
+        newLoc.z = 0;
         _rigidBody.MovePosition(newLoc);
-        _rigidBody.MoveRotation(Quaternion.LookRotation(newLoc));
+            
+        //TODO: Я ЕБАЛ КВАТЕРНИОНЫ
+        _rigidBody.MoveRotation(Quaternion.LookRotation(newLoc - transform.position) * Quaternion.Euler(0, -90, 0));
 
     } 
 }
