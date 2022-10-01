@@ -1,7 +1,7 @@
 ﻿
 using UnityEngine;
 
-public class TileElement : MonoBehaviour, ITileElement
+public class GridElement : MonoBehaviour, IGridElement
 {
     
 }

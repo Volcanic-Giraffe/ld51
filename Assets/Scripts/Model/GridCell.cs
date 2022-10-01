@@ -5,16 +5,16 @@ using UnityEditor;
 using UnityEngine;
 
 // Суть есть место в гриде
-public class Tile : MonoBehaviour
+public class GridCell : MonoBehaviour
 {
     public bool Highlighted;
     public bool Busy;
 
-    public ITileElement Element;
+    public IGridElement Element;
     private void OnTriggerEnter(Collider other)
     {
         Debug.Log(other);
-        var tileElement = other.GetComponent<ITileElement>();
+        var tileElement = other.GetComponent<IGridElement>();
         if (tileElement != null)
         {
             Busy = true;
@@ -24,7 +24,7 @@ public class Tile : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        var tileElement = other.GetComponent<ITileElement>();
+        var tileElement = other.GetComponent<IGridElement>();
         if (tileElement != null)
         {
             Busy = false;
