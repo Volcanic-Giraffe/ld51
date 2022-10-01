@@ -83,7 +83,7 @@ GameObject:
   - component: {fileID: 5097562126903145835}
   - component: {fileID: 575404743497624080}
   m_Layer: 0
-  m_Name: VagonPlatform
+  m_Name: WagonPlatform
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

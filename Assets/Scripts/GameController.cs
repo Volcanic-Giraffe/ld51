@@ -11,8 +11,8 @@ public class GameController : MonoBehaviour
     private Camera _camera;
 
     public RoadTile[] RoadTilePrefabs;
-    public Vagon VagonPrefab;
-    public Vagon LocomotivePrefab;
+    public Wagon WagonPrefab;
+    public Wagon LocomotivePrefab;
 
     private void Awake()
     {

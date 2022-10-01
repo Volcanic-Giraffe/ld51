@@ -4,8 +4,10 @@ using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 
-public class Vagon : MonoBehaviour
+public class Wagon : MonoBehaviour
 {
+    public const float LinkLength = 1.5f;
+    
     [SerializeField] private Transform Rotator;
     
     private Rigidbody _rigidBody;

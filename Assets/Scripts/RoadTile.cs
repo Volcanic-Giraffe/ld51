@@ -20,7 +20,7 @@ public class RoadTile : MonoBehaviour
     {
         if (RoadSwitch != null) RoadSwitch.SetAllowedConnections(Type);
     }
-    public Vector2Int Direction(Vector2Int from, Vagon vagon = null)
+    public Vector2Int Direction(Vector2Int from, Wagon wagon = null)
     {
         switch (Type)
         {
