@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2227390004981975613}
   - component: {fileID: 6354120432888080250}
   m_Layer: 0
-  m_Name: SimpleTile
+  m_Name: RoadDL
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -73,8 +73,8 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 25
-  m_Sprite: {fileID: 21300000, guid: 35e56204bbc53cf4eb8107ddc6c8b226, type: 3}
+  m_SortingOrder: 10
+  m_Sprite: {fileID: 21300000, guid: e013de636f3d2e54e96d4d1ffc637b38, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -97,7 +97,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b69e9adf6ffae1b4485b7c71e016b7bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Up: 1
-  Down: 0
-  Left: 1
-  Right: 0
+  Type: 5
+  RoadSwitch: {fileID: 0}
