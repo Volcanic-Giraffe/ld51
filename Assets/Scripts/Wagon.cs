@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
+using UnityEditor;
 using UnityEngine;
 
 [ExecuteAlways]
@@ -105,11 +106,12 @@ public class Wagon : MonoBehaviour
                 _fromPrevious = _previousRoad != null ? MoonGrid.Instance.XY(_previousRoad) - myXY : Vector2Int.left;
                 //my new direction
                 Direction = roadIamAt.Direction(_fromPrevious, this);
-
+                    //Debug.Log($"prevFrom = {_fromPrevious}, direction={Direction}");
             }
 
             if (IsFirstWagon())
             {
+                _checkedPoints.Clear();
                 var cellsToObstacle = CellsToObstacle(myXY, _fromPrevious, 5);
 
                 if (cellsToObstacle <= 1)
@@ -138,6 +140,7 @@ public class Wagon : MonoBehaviour
         }
 
         
+        
         var targetCell = (myCell != null && myCell.HasRoad) 
             ? myCell.Road.GetNextPoint(transform.position, _fromPrevious, Direction)
             : MoonGrid.Instance.CenterOfTile(myXY + Direction);
@@ -152,8 +155,10 @@ public class Wagon : MonoBehaviour
         Rotator.eulerAngles = new Vector3(0, 0, angleS);
     }
 
+    private List<Vector2Int> _checkedPoints = new List<Vector2Int>();  
     private int CellsToObstacle(Vector2Int xy, Vector2Int from, int max)
     {
+        _checkedPoints.Add(xy);
         if (max == 0) return 0;
         var cell = MoonGrid.Instance.GetCell(xy);
         if (cell == null || !cell.HasRoad) return 0;
@@ -320,5 +325,14 @@ public class Wagon : MonoBehaviour
             // var wagon = other.GetComponentInParent<Wagon>();
             // ..
         }
+    }
+
+    private void OnDrawGizmos()
+    {
+        foreach (var vi in _checkedPoints)
+        {
+            Gizmos.DrawSphere(MoonGrid.Instance.CenterOfTile(vi), 0.3f);
+        }
+        Handles.Label(transform.position, $"Speed={_currentSpeed} Dir={Direction}");
     }
 }

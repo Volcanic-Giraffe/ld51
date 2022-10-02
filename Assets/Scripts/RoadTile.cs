@@ -83,11 +83,11 @@ public class RoadTile : MonoBehaviour
     
     private static Vector3[] L2D = new[]
     {
-        new Vector3(-0.5f, 0, 0),
+        new Vector3(-0.6f, 0, 0),
         new Vector3(-0.35f, 0, 0),
         new Vector3(-0.15f, -0.15f, 0),
         new Vector3(0, -0.35f, 0),
-        new Vector3(0, -0.5f, 0),
+        new Vector3(0, -0.6f, 0),
     };
 
     private static Vector3[] R2D = L2D.Select(it => new Vector3(-it.x, it.y, 0)).ToArray();
@@ -99,9 +99,9 @@ public class RoadTile : MonoBehaviour
     private static Vector3[] U2R = R2U.Reverse().ToArray();
     private static Vector3[] U2L = L2U.Reverse().ToArray();
 
-    private static Vector3[] L2R = { new(-0.5f, 0), new(0.5f, 0), };
+    private static Vector3[] L2R = { new(-0.6f, 0), new(0.6f, 0), };
     private static Vector3[] R2L = L2R.Reverse().ToArray();
-    private static Vector3[] U2D = { new(0, 0.5f), new(0, -0.5f), };
+    private static Vector3[] U2D = { new(0, 0.6f), new(0, -0.6f), };
     private static Vector3[] D2U = U2D.Reverse().ToArray();
 
     private void OnDrawGizmosSelected()
@@ -130,7 +130,7 @@ public class RoadTile : MonoBehaviour
         if (from == Vector2Int.right && to == Vector2Int.left) return R2L;
         if (from == Vector2Int.up && to == Vector2Int.down) return U2D;
         if (from == Vector2Int.down && to == Vector2Int.up) return D2U;
-        throw new Exception("Damn");
+        throw new Exception($"Damn - unexpected from={from} to={to}");
     }
 
     public Vector3 GetNextPoint(Vector3 ourPoint, Vector2Int from, Vector2Int to)

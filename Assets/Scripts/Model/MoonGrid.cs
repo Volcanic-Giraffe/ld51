@@ -149,7 +149,7 @@ public class MoonGrid : MonoBehaviour
 
             }
         }
-        Gizmos.color = Color.green;
+        Gizmos.color = Color.green.WithAlpha(0.4f);
         Gizmos.DrawSphere(CenterOfTile(EnterPoint), 0.5f);
     }
 
