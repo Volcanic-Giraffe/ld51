@@ -28,10 +28,15 @@ public class Wagon : MonoBehaviour
     private Wagon _trainHead;
 
     private float _baseSpeed;
+
+    private float _currentSpeed;
+    
+    private bool _removed;
     
     private void Awake()
     {
         _baseSpeed = Speed;
+        _currentSpeed = Speed;
         
         _rigidBody = GetComponent<Rigidbody>();
     }
@@ -43,13 +48,25 @@ public class Wagon : MonoBehaviour
 
     private void Update()
     {
-        if (_trainHead == null || _trainHead.WagonType != WagonType.Locomotive)
+        if (FrontWagon == null && WagonType != WagonType.Locomotive)
         {
             RemoveFromTrain(RemoveReason.LostLocomotive);
+        }
+
+        if (Mathf.Abs(_currentSpeed - Speed) > 0.05f)
+        {
+            var delta = Speed - _currentSpeed;
+            if (Mathf.Abs(delta) > 0.2f)
+            {
+                delta = MathF.Sign(delta) * 0.2f;
+            }
+
+            _currentSpeed += delta;
         }
     }
 
     private RoadTile _previousRoad = null;
+    private Vector2Int _fromPrevious;
 
     private void FixedUpdate()
     {
@@ -63,25 +80,45 @@ public class Wagon : MonoBehaviour
         }
         else if (myCell != null && myCell.HasRoad)
         {
-                                     
             var roadIamAt = myCell.Road;
             if (roadIamAt != _previousRoad)
             {
-                var from = _previousRoad != null ? MoonGrid.Instance.XY(_previousRoad) - myXY : Vector2Int.left;
+                _fromPrevious = _previousRoad != null ? MoonGrid.Instance.XY(_previousRoad) - myXY : Vector2Int.left;
                 //my new direction
-                Direction = roadIamAt.Direction(from, this);
-                //Debug.Log($"Switch diration of {this} to {Direction} (from = {from})");
+                Direction = roadIamAt.Direction(_fromPrevious, this);
+
+            }
+
+            if (IsFirstWagon())
+            {
+                var cellsToObstacle = CellsToObstacle(myXY, _fromPrevious, 5);
+
+                if (cellsToObstacle <= 1)
+                {
+                    Stop();
+                }
+                else if (cellsToObstacle <= 3)
+                {
+                    SlowDown();
+                }
+                else
+                {
+                    SpeedUp();
+                }
+
             }
 
             _previousRoad = roadIamAt;
         }
         else
         {
+            RemoveFromTrain(RemoveReason.OffTrack);
             Debug.Log("Strange.....");
+            Stop();
         }
 
         var targetCell = MoonGrid.Instance.CenterOfTile(myXY + Direction);
-        var newLoc = transform.position + (targetCell - transform.position).normalized * (_trainHead.Speed * Time.fixedDeltaTime);
+        var newLoc = transform.position + (targetCell - transform.position).normalized * (_trainHead._currentSpeed * Time.fixedDeltaTime);
         newLoc.z = 0;
         _rigidBody.MovePosition(newLoc);
             
@@ -90,6 +127,18 @@ public class Wagon : MonoBehaviour
 
         Rotator.eulerAngles = new Vector3(0, 0, angleS);
     }
+
+    private int CellsToObstacle(Vector2Int xy, Vector2Int from, int max)
+    {
+        if (max == 0) return 0;
+        var cell = MoonGrid.Instance.GetCell(xy);
+        if (cell == null || !cell.HasRoad) return 0;
+        var newDirection = cell.Road.Direction(from);
+        if (newDirection == Vector2Int.zero) return 0;
+        return 1 + CellsToObstacle(xy + newDirection, -newDirection, max - 1);
+
+    }
+    
 
     public void AddNewWagon(WagonType type)
     {
@@ -140,17 +189,25 @@ public class Wagon : MonoBehaviour
         _trainHead.Speed = _baseSpeed;
     }
 
+    public void Stop()
+    {
+        _trainHead.Speed = 0;
+    }
+
     public void RemoveFromTrain(RemoveReason reason)
     {
-        if (RearWagon != null)
-        {
-            RearWagon.FrontWagon = FrontWagon;
-        }
-
-        if (FrontWagon != null)
-        {
-            FrontWagon.RearWagon = RearWagon;
-        }
+        if (_removed) return;
+        _removed = true;
+        
+        // >>> re-linking is disabled, only tail carts can be removed for good score.
+        // if (RearWagon != null) RearWagon.FrontWagon = FrontWagon;
+        // if (FrontWagon != null) FrontWagon.RearWagon = RearWagon;
+        // <<<
+        
+        // null linking helps removing wagons with no locomotive
+        if (RearWagon != null) RearWagon.FrontWagon = null;
+        if (FrontWagon != null) FrontWagon.RearWagon = null;
+        
 
         // todo: move positions on tail wagons
 
@@ -158,6 +215,11 @@ public class Wagon : MonoBehaviour
 
         Instantiate(effect, transform.position, Quaternion.identity);
 
+        if (!RemoveReasons.IsGood(reason) && WagonType == WagonType.Locomotive)
+        {
+            GameController.Instance.Stats.AddLife(-1);
+        }
+        
         Destroy(gameObject);
         
     }
@@ -215,9 +277,13 @@ public class Wagon : MonoBehaviour
         {
             var wagon = other.GetComponentInParent<Wagon>();
 
-            if (HasWagon(wagon)) return;
-
-            if (WagonType == WagonType.Locomotive)
+            if (WagonType == WagonType.Locomotive && !HasWagon(wagon))
+            {
+                wagon.RemoveFromTrain(RemoveReason.Collision);
+            }
+            
+            // self collision mostly
+            if (wagon != FrontWagon && wagon != RearWagon && WagonType == WagonType.Locomotive)
             {
                 wagon.RemoveFromTrain(RemoveReason.Collision);
             }
@@ -227,11 +293,8 @@ public class Wagon : MonoBehaviour
     {
         if (other.CompareTag("Wagon"))
         {
-            var wagon = other.GetComponentInParent<Wagon>();
-
-            if (HasWagon(wagon)) return;
-            
-            // wagon.SpeedUp();
+            // var wagon = other.GetComponentInParent<Wagon>();
+            // ..
         }
     }
 }

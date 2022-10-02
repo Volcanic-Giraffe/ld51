@@ -93,7 +93,7 @@ public class MoonGrid : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        if (GameController.Instance?.Mode == GameController.GameMode.Sort) return;
+        
         for (int x = 0; x < Width; x++)
         {
             for (int y = 0; y < Height; y++)
@@ -119,6 +119,15 @@ public class MoonGrid : MonoBehaviour
                 if (tile != null && tile.Highlighted)
                 {
                     Gizmos.color = Gizmos.color.WithAlpha(0.6f);
+                }
+
+                if (tile != null && tile.HasRoad)
+                {
+                    var rs = tile.Road.GetComponentInChildren<RoadSwitch>();
+                    if (rs != null && rs.HasTrainOnTop)
+                    {
+                        Gizmos.color = Color.red.WithAlpha(0.8f);;
+                    }
                 }
 
                 Gizmos.DrawCube(CenterOfTile(new Vector2Int(x, y)), new Vector3(1, 1, 0.1f));

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7072906416420230219}
   - component: {fileID: 7072906416420230220}
   - component: {fileID: 5865580056066922723}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: GridCell
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -60,3 +60,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Highlighted: 0
   Busy: 0
+  Road: {fileID: 0}
