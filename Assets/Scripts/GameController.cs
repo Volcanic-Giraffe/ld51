@@ -21,6 +21,8 @@ public class GameController : MonoBehaviour
 
     private float _timer;
 
+    public event Action OnEveryTenSeconds;
+    
     public PlayerStats Stats { get; private set; }
 
     private void Awake()
@@ -154,8 +156,10 @@ public class GameController : MonoBehaviour
         if (_timer <= 0)
         {
             _timer = SpawnTime;
-
+            
             SpawnTrain();
+            
+            OnEveryTenSeconds?.Invoke();
         }
     }
 
@@ -205,13 +209,19 @@ public class GameController : MonoBehaviour
         newTrain.transform.position =
             MoonGrid.Instance.CenterOfTile(MoonGrid.Instance.EnterPoint + Vector2Int.left * 3);
 
-        var types = new List<WagonType>() { WagonType.Green, WagonType.Blue, WagonType.Red };
-        types = types.Shuffle().ToList();
-
-        if (Random.value < 0.4f) types.RemoveAt(0);
-        if (Random.value < 0.4f) types.RemoveAt(0);
-
-        foreach (var wType in types)
+        var wave = LevelScenario.Instance.Wave;
+        var length = Random.Range(wave.TrainsLengthMin, wave.TrainsLengthMax);
+        
+        // todo: limit by stations
+        var types = new List<WagonType>() {WagonType.Green, WagonType.Blue, WagonType.Red };
+        
+        var wTypes = new List<WagonType>();
+        for (int i = 0; i < length; i++)
+        {
+            wTypes.Add(types.PickRandom());
+        }
+        
+        foreach (var wType in wTypes)
         {
             newTrain.AddNewWagon(wType);
         }

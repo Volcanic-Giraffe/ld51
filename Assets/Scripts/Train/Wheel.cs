@@ -2,6 +2,7 @@
 using System;
 using UnityEngine;
 
+[ExecuteAlways]
 public class Wheel : MonoBehaviour
 {
     private void Update()
