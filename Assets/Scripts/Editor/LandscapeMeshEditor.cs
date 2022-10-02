@@ -2,7 +2,7 @@ using UnityEditor;
 using UnityEngine;
 
 [CustomEditor(typeof(LandscapeMesh))]
-public class TranslateHelperEditor : Editor
+public class LandscapeMeshEditor : Editor
 {
     public override void OnInspectorGUI()
     {
