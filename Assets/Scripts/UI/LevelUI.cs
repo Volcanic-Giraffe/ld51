@@ -12,6 +12,7 @@ public class LevelUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI runButtonText;
     [SerializeField] private TextMeshProUGUI scoreText;
     [SerializeField] private TextMeshProUGUI livesText;
+    [SerializeField] private TextMeshProUGUI waveText;
 
     private void Awake()
     {
@@ -22,6 +23,13 @@ public class LevelUI : MonoBehaviour
     {
         GameController.Instance.Stats.OnScoreChange += SetScore;
         GameController.Instance.Stats.OnLivesChange += SetLives;
+
+        GameController.Instance.OnEveryTenSeconds += SetWave;
+    }
+
+    private void SetWave()
+    {
+        waveText.SetText($"Wave: {LevelScenario.Instance.WaveIndex} (train: {LevelScenario.Instance.WaveRepeat}/{LevelScenario.Instance.Wave.Repeats})");
     }
 
     private void SetScore(int score, int change)
@@ -52,6 +60,13 @@ public class LevelUI : MonoBehaviour
         runButtonText.SetText(GameController.Instance.Mode == GameController.GameMode.Build ? "Run" : "Stop");
     }
 
+    public void OnSkipClicked()
+    {
+        LevelScenario.Instance.UpdateWave();
+
+        SetWave();
+    }
+    
     private void Update()
     {
         
