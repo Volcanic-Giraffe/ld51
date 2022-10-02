@@ -18,9 +18,6 @@ public class GameController : MonoBehaviour
 
     public List<WagonPrefab> WagonPrefabs;
 
-    public Wagon WagonPrefab;
-    public Wagon LocomotivePrefab;
-
     private float _timer;
     
     private void Awake()
