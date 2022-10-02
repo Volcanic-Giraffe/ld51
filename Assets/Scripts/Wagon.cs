@@ -20,9 +20,20 @@ public class Wagon : MonoBehaviour
     public float Speed;
     public Vector2Int Direction = Vector2Int.right;
 
+    private Wagon _trainHead;
+
+    private float _baseSpeed;
+    
     private void Awake()
     {
+        _baseSpeed = Speed;
+        
         _rigidBody = GetComponent<Rigidbody>();
+    }
+
+    private void Start()
+    {
+        RefreshLinks();
     }
 
     private void Update()
@@ -62,7 +73,7 @@ public class Wagon : MonoBehaviour
         }
 
         var targetCell = MoonGrid.Instance.CenterOfTile(myXY + Direction);
-        var newLoc = transform.position + (targetCell - transform.position).normalized * (Speed * Time.fixedDeltaTime);
+        var newLoc = transform.position + (targetCell - transform.position).normalized * (_trainHead.Speed * Time.fixedDeltaTime);
         newLoc.z = 0;
         _rigidBody.MovePosition(newLoc);
             
@@ -83,6 +94,8 @@ public class Wagon : MonoBehaviour
         lastWagon.RearWagon = newWagon;
 
         newWagon.transform.position = new Vector3(pos.x - LinkLength, pos.y, 0f);
+
+        RefreshLinks();
     }
 
     public Wagon LastWagon()
@@ -95,6 +108,28 @@ public class Wagon : MonoBehaviour
         {
             return this;
         }
+    }
+    
+    public Wagon FirstWagon()
+    {
+        if (FrontWagon != null)
+        {
+            return FrontWagon.FirstWagon();
+        }
+        else
+        {
+            return this;
+        }
+    }
+
+    public void SlowDown()
+    {
+        _trainHead.Speed = _baseSpeed * 0.3f;
+    }
+
+    public void SpeedUp()
+    {
+        _trainHead.Speed = _baseSpeed;
     }
 
     public void RemoveFromTrain()
@@ -118,5 +153,56 @@ public class Wagon : MonoBehaviour
     public bool IsLastWagon()
     {
         return RearWagon == null;
+    }
+    
+    public bool IsFirstWagon()
+    {
+        return FrontWagon == null;
+    }
+
+    public bool HasWagon(Wagon wagon)
+    {
+        return this == wagon || FrontHas(wagon) || RearHas(wagon);
+    }
+
+    private bool FrontHas(Wagon wagon)
+    {
+        if (FrontWagon == wagon) return true;
+        return FrontWagon != null && FrontWagon.FrontHas(wagon);
+    }
+    
+    private bool RearHas(Wagon wagon)
+    {
+        if (RearWagon == wagon) return true;
+        return RearWagon != null && RearWagon.RearHas(wagon);
+    }
+
+
+    private void RefreshLinks()
+    {
+        _trainHead = FirstWagon();
+    }
+    
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Wagon"))
+        {
+            var wagon = other.GetComponentInParent<Wagon>();
+
+            if (HasWagon(wagon)) return;
+            
+            wagon.SlowDown();
+        }
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Wagon"))
+        {
+            var wagon = other.GetComponentInParent<Wagon>();
+
+            if (HasWagon(wagon)) return;
+            
+            wagon.SpeedUp();
+        }
     }
 }
