@@ -54,6 +54,8 @@ public class Wagon : MonoBehaviour
     private void Start()
     {
         RefreshLinks();
+        
+        if (LevelScenario.Instance != null) LevelScenario.Instance.AddWagon(this);
     }
 
     private void Update()
@@ -326,6 +328,12 @@ public class Wagon : MonoBehaviour
             // ..
         }
     }
+
+    private void OnDestroy()
+    {
+        if (LevelScenario.Instance != null) LevelScenario.Instance.RemoveWagon(this);
+    }
+
 
 #if UNITY_EDITOR
     private void OnDrawGizmos()

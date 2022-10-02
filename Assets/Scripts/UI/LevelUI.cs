@@ -28,6 +28,8 @@ public class LevelUI : MonoBehaviour
         LevelScenario.Instance.OnWaveBegin += SetWave;
         LevelScenario.Instance.OnEveryTenSeconds += SetTrains;
 
+        GameController.Instance.OnModeChanged += SetWave;
+        
         SetWave();
     }
 
