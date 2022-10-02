@@ -20,8 +20,9 @@ public class ExitTrigger : MonoBehaviour
             }
             else
             {
+                // once locomotive destroyed - the rest of the train will be destroyed with LostLocomotive reason
                 wagon.RemoveFromTrain(RemoveReason.ExitBad);
-                GameController.Instance.Stats.AddScore( Const.ScorePerWagonExit);
+                GameController.Instance.Stats.AddScore(wagon.TrainSize() * Const.ScorePerWagonExit);
             }
         }
     }
