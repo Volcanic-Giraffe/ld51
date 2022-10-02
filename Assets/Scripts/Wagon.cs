@@ -29,6 +29,8 @@ public class Wagon : MonoBehaviour
 
     private float _baseSpeed;
     
+    private bool _removed;
+    
     private void Awake()
     {
         _baseSpeed = Speed;
@@ -43,7 +45,7 @@ public class Wagon : MonoBehaviour
 
     private void Update()
     {
-        if (_trainHead == null || _trainHead.WagonType != WagonType.Locomotive)
+        if (FrontWagon == null && WagonType != WagonType.Locomotive)
         {
             RemoveFromTrain(RemoveReason.LostLocomotive);
         }
@@ -77,6 +79,7 @@ public class Wagon : MonoBehaviour
         }
         else
         {
+            RemoveFromTrain(RemoveReason.OffTrack);
             Debug.Log("Strange.....");
         }
 
@@ -142,15 +145,18 @@ public class Wagon : MonoBehaviour
 
     public void RemoveFromTrain(RemoveReason reason)
     {
-        if (RearWagon != null)
-        {
-            RearWagon.FrontWagon = FrontWagon;
-        }
-
-        if (FrontWagon != null)
-        {
-            FrontWagon.RearWagon = RearWagon;
-        }
+        if (_removed) return;
+        _removed = true;
+        
+        // >>> re-linking is disabled, only tail carts can be removed for good score.
+        // if (RearWagon != null) RearWagon.FrontWagon = FrontWagon;
+        // if (FrontWagon != null) FrontWagon.RearWagon = RearWagon;
+        // <<<
+        
+        // null linking helps removing wagons with no locomotive
+        if (RearWagon != null) RearWagon.FrontWagon = null;
+        if (FrontWagon != null) FrontWagon.RearWagon = null;
+        
 
         // todo: move positions on tail wagons
 
@@ -215,9 +221,13 @@ public class Wagon : MonoBehaviour
         {
             var wagon = other.GetComponentInParent<Wagon>();
 
-            if (HasWagon(wagon)) return;
-
-            if (WagonType == WagonType.Locomotive)
+            if (WagonType == WagonType.Locomotive && !HasWagon(wagon))
+            {
+                wagon.RemoveFromTrain(RemoveReason.Collision);
+            }
+            
+            // self collision mostly
+            if (wagon != FrontWagon && wagon != RearWagon && WagonType == WagonType.Locomotive)
             {
                 wagon.RemoveFromTrain(RemoveReason.Collision);
             }
@@ -227,11 +237,8 @@ public class Wagon : MonoBehaviour
     {
         if (other.CompareTag("Wagon"))
         {
-            var wagon = other.GetComponentInParent<Wagon>();
-
-            if (HasWagon(wagon)) return;
-            
-            // wagon.SpeedUp();
+            // var wagon = other.GetComponentInParent<Wagon>();
+            // ..
         }
     }
 }

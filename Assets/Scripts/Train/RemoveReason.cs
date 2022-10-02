@@ -8,6 +8,7 @@ public enum RemoveReason
     LostLocomotive,
     ExitGood,
     ExitBad,
+    OffTrack,
 }
 
 public static class RemoveReasons {
@@ -24,6 +25,7 @@ public static class RemoveReasons {
             case RemoveReason.Collision:
             case RemoveReason.LostLocomotive:
             case RemoveReason.ExitBad:
+            case RemoveReason.OffTrack:
                 return false;
             default:
                 return false;
