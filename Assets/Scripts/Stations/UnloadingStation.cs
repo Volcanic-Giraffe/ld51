@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UnloadingStation : MonoBehaviour
+public class UnloadingStation : MonoBehaviour, IGridElement
 {
     public WagonType WagonType;
 
