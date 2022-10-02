@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using DG.Tweening;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
 
 public class GameController : MonoBehaviour
@@ -337,5 +339,11 @@ public class GameController : MonoBehaviour
         newRoad.transform.position = road.transform.position;
         Destroy(road.gameObject);
         cell.Road = newRoad;
+    }
+
+    public void RestartGame()
+    {
+        DOTween.KillAll();
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }

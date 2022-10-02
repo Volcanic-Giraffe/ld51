@@ -37,12 +37,24 @@ public class LevelScenario : MonoBehaviour
 
     void Start()
     {
-        GameController.Instance.OnModeChanged += () =>
-        {
-            _timer = 0;
-        };
+        GameController.Instance.OnModeChanged += OnModeChange;
+
+        GameController.Instance.Stats.OnLivesChange += OnLivesChange;
     }
 
+    private void OnModeChange()
+    {
+        _timer = 0;
+    }
+
+    private void OnLivesChange(int current, int change)
+    {
+        if (current <= 0)
+        {
+            GameOverUI.Instance.Show();
+        }
+    }
+    
     private void Update()
     {
         if (GameController.Instance.Mode == GameController.GameMode.Build) return;
