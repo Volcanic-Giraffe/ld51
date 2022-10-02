@@ -305,6 +305,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: StationBlue
       objectReference: {fileID: 0}
+    - target: {fileID: 4355446435998512619, guid: 65aa4b22d2e9cd04680b6e03b6bb1823,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 65aa4b22d2e9cd04680b6e03b6bb1823, type: 3}
 --- !u!1001 &1790852193
@@ -645,6 +650,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: StationRed
       objectReference: {fileID: 0}
+    - target: {fileID: 766625929398841172, guid: a9fec7b1bac6e014598db621db849a02,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2728856321123247057, guid: a9fec7b1bac6e014598db621db849a02,
         type: 3}
       propertyPath: m_RootOrder
@@ -768,6 +778,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: StationGreen
+      objectReference: {fileID: 0}
+    - target: {fileID: 8843186976194795073, guid: 8d4656a8c28c98044a2f22685020fdf9,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8d4656a8c28c98044a2f22685020fdf9, type: 3}

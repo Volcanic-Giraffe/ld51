@@ -38,6 +38,8 @@ public class LevelScenario : MonoBehaviour
             Wave = waves[Math.Min(WaveIndex, waves.Count - 1)];
             WaveRepeat = 0;
         }
+
+        GameController.Instance.OnWaveUpdate();
     }
     
 }

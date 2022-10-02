@@ -91,6 +91,21 @@ public class MoonGrid : MonoBehaviour
         return !tile.Busy;
     }
 
+    public GridCell RandomFreeCell()
+    {
+        var list = new List<GridCell>();
+        
+        for (int x = 0; x < Width; x++)
+        {
+            for (int y = 0; y < Height; y++)
+            {
+                if (!_cells[x, y].Busy) list.Add(_cells[x,y]);
+            }
+        }
+
+        return list.PickRandom();
+    }
+
     private void OnDrawGizmos()
     {
         

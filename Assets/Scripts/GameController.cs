@@ -25,8 +25,12 @@ public class GameController : MonoBehaviour
     
     public PlayerStats Stats { get; private set; }
 
+    private List<UnloadingStation> _stations;
+    
     private void Awake()
     {
+        _stations = FindObjectsOfType<UnloadingStation>().ToList();
+        
         Stats = new PlayerStats();
 
         Instance = this;
@@ -43,6 +47,7 @@ public class GameController : MonoBehaviour
         }
 
         RecalculateRoads();
+        SpawnStation();
     }
 
     public enum GameMode
@@ -156,11 +161,17 @@ public class GameController : MonoBehaviour
         if (_timer <= 0)
         {
             _timer = SpawnTime;
-            
+
+            SpawnStation();
             SpawnTrain();
             
             OnEveryTenSeconds?.Invoke();
         }
+    }
+
+    public void OnWaveUpdate()
+    {
+        SpawnStation();
     }
 
     void BuildRoad(GridCell cell)
@@ -201,6 +212,29 @@ public class GameController : MonoBehaviour
         }
     }
 
+    private void SpawnStation()
+    {
+        var wave = LevelScenario.Instance.Wave;
+
+        if (_stations.Count < wave.Stations)
+        {
+            for (var i = _stations.Count; i < wave.Stations; i++)
+            {
+                var newStation = Instantiate(StationPrefabs[i % StationPrefabs.Count]);
+
+                var cell = MoonGrid.Instance.RandomFreeCell();
+
+                newStation.transform.position = cell.transform.position;
+                cell.Busy = false; // busy makes impossible to place roads.
+                
+                // todo: but we still need to lock cells that are locked on a spawned station
+                
+                cell.Element = newStation;
+                
+                _stations.Add(newStation);
+            }
+        }
+    }
     private void SpawnTrain()
     {
         if (Mode == GameMode.Build) return;
@@ -212,9 +246,14 @@ public class GameController : MonoBehaviour
         var wave = LevelScenario.Instance.Wave;
         var length = Random.Range(wave.TrainsLengthMin, wave.TrainsLengthMax);
         
-        // todo: limit by stations
-        var types = new List<WagonType>() {WagonType.Green, WagonType.Blue, WagonType.Red };
-        
+        var types = _stations.Select(s => s.WagonType).ToList();
+
+        if (_stations.Count == 0)
+        {
+            types = new List<WagonType>(){WagonType.Green, WagonType.Red, WagonType.Blue};
+            Debug.LogWarning("NO STATIONS, WAVE IS UNBEATABLE");
+        }
+
         var wTypes = new List<WagonType>();
         for (int i = 0; i < length; i++)
         {
