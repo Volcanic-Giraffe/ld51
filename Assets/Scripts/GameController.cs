@@ -23,6 +23,8 @@ public class GameController : MonoBehaviour
 
     public GameObject BuildCursor;
 
+    public event Action OnModeChanged;
+    
     private void Awake()
     {
         _stations = FindObjectsOfType<UnloadingStation>().ToList();
@@ -157,7 +159,7 @@ public class GameController : MonoBehaviour
     {
         SpawnStation();
         
-        Mode = GameMode.Build;
+        SetMode(GameMode.Build);
         BuildCursor.SetActive(true);
         var wagons = FindObjectsOfType<Wagon>();
 
@@ -167,6 +169,13 @@ public class GameController : MonoBehaviour
 
             Destroy(wagon.gameObject);
         }
+    }
+
+    private void SetMode(GameMode mode)
+    {
+        Mode = mode;
+        
+        OnModeChanged?.Invoke();
     }
 
     public void OnWaveUpdate()
@@ -199,7 +208,7 @@ public class GameController : MonoBehaviour
         else
         {
             BuildCursor.SetActive(false);
-            Mode = GameMode.Sort;
+            SetMode(GameMode.Sort);
         }
     }
 

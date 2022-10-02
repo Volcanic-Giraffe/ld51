@@ -24,7 +24,9 @@ public class LevelScenario : MonoBehaviour
 
 
     private float _timer;
-    
+
+    private List<Wagon> _wagons = new();
+
     private void Awake()
     {
         Instance = this;
@@ -41,6 +43,16 @@ public class LevelScenario : MonoBehaviour
     private void Update()
     {
         if (GameController.Instance.Mode == GameController.GameMode.Build) return;
+
+        if (TrainsLeft == 0)
+        {
+            if (_wagons.Count == 0)
+            {
+                UpdateWave();
+            }
+            
+            return;
+        }
         
         _timer -= Time.deltaTime;
 
@@ -71,6 +83,16 @@ public class LevelScenario : MonoBehaviour
         {
             OnEveryTenSeconds?.Invoke();
         }
+    }
+
+    public void AddWagon(Wagon wagon)
+    {
+        _wagons.Add(wagon);
+    }
+    
+    public void RemoveWagon(Wagon wagon)
+    {
+        _wagons.Remove(wagon);
     }
 }
 
