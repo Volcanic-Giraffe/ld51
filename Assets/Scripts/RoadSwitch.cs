@@ -48,10 +48,12 @@ public class RoadSwitch : MonoBehaviour
         transform.localScale = _mycell.Highlighted ? new Vector3(2, 2, 2) : Vector3.one;
     }
 
+#if UNITY_EDITOR
     private void OnDrawGizmos()
     {
         Gizmos.DrawRay(transform.position, Vector3.back);
     }
+#endif
 
     public void Toggle()
     {

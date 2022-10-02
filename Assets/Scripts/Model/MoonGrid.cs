@@ -106,6 +106,7 @@ public class MoonGrid : MonoBehaviour
         return list.PickRandom();
     }
 
+#if UNITY_EDITOR
     private void OnDrawGizmos()
     {
 
@@ -152,6 +153,6 @@ public class MoonGrid : MonoBehaviour
         Gizmos.color = Color.green.WithAlpha(0.4f);
         Gizmos.DrawSphere(CenterOfTile(EnterPoint), 0.5f);
     }
-
+#endif
 
 }
