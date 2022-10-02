@@ -36,6 +36,11 @@ public class WatchUI : MonoBehaviour
             if (after > before && _doneOnce)
             {
                 transform.DOPunchScale(Vector3.one * 0.1f, 0.17f);
+
+                if (LevelScenario.Instance.TrainsLeft <= 1)
+                {
+                    Pause();
+                }
             }
 
             _doneOnce = true;

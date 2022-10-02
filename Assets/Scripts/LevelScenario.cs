@@ -37,7 +37,10 @@ public class LevelScenario : MonoBehaviour
 
     void Start()
     {
-        
+        GameController.Instance.OnModeChanged += () =>
+        {
+            _timer = 0;
+        };
     }
 
     private void Update()
@@ -75,8 +78,6 @@ public class LevelScenario : MonoBehaviour
             Wave = waves[Math.Min(WaveIndex, waves.Count - 1)];
             TrainNumber = 0;
 
-            _timer = SpawnTime * 0.1f;
-            
             OnWaveBegin?.Invoke();
         }
         else
