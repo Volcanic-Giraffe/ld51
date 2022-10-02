@@ -4,12 +4,12 @@ public class PlayerStats
 {
     public int Score { get; private set; }
 
-    public event Action<int> OnScoreChange;
+    public event Action<int, int> OnScoreChange;
 
-    public void AddScore(int value)
+    public void AddScore(int change)
     {
-        Score += value;
+        Score += change;
         
-        OnScoreChange?.Invoke(Score);
+        OnScoreChange?.Invoke(Score, change);
     }
 }

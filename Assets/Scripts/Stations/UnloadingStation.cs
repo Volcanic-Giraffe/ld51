@@ -17,7 +17,7 @@ public class UnloadingStation : MonoBehaviour
             {
                 wagon.RemoveFromTrain();
                 
-                GameController.Instance.Stats.AddScore(10);
+                GameController.Instance.Stats.AddScore(Const.ScorePerWagonUnloaded);
             }
         }
     }

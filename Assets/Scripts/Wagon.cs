@@ -149,7 +149,6 @@ public class Wagon : MonoBehaviour
         }
 
         // todo: move positions on tail wagons
-        // todo: add score!
         Instantiate(RemoveEffect, transform.position, Quaternion.identity);
         
         Destroy(gameObject);
@@ -183,7 +182,21 @@ public class Wagon : MonoBehaviour
         return RearWagon != null && RearWagon.RearHas(wagon);
     }
 
+    public int TrainSize()
+    {
+        var count = 1;
 
+        var current = _trainHead.RearWagon;
+
+        while (current != null)
+        {
+            count += 1;
+            current = current.RearWagon;
+        }
+
+        return count;
+    }
+    
     private void RefreshLinks()
     {
         _trainHead = FirstWagon();

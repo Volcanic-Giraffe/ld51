@@ -22,10 +22,18 @@ public class LevelUI : MonoBehaviour
         GameController.Instance.Stats.OnScoreChange += SetScore;
     }
 
-    private void SetScore(int score)
+    private void SetScore(int score, int change)
     {
         scoreText.SetText($"Score: {score}");
-        scoreText.transform.DOPunchScale(Vector3.one * 0.2f, 0.18f);
+        
+        if (change < 0)
+        {
+            scoreText.transform.DOPunchScale(-Vector3.one * 0.2f, 0.18f);
+        }
+        else
+        {
+            scoreText.transform.DOPunchScale(Vector3.one * 0.2f, 0.18f);
+        }
     }
 
     public void OnRunClicked()
