@@ -11,6 +11,7 @@ public class LevelUI : MonoBehaviour
     
     [SerializeField] private TextMeshProUGUI runButtonText;
     [SerializeField] private TextMeshProUGUI scoreText;
+    [SerializeField] private TextMeshProUGUI livesText;
 
     private void Awake()
     {
@@ -20,6 +21,7 @@ public class LevelUI : MonoBehaviour
     private void Start()
     {
         GameController.Instance.Stats.OnScoreChange += SetScore;
+        GameController.Instance.Stats.OnLivesChange += SetLives;
     }
 
     private void SetScore(int score, int change)
@@ -34,6 +36,13 @@ public class LevelUI : MonoBehaviour
         {
             scoreText.transform.DOPunchScale(Vector3.one * 0.2f, 0.18f);
         }
+    }
+
+    private void SetLives(int lives, int change)
+    {
+        livesText.SetText($"Lives: {lives}");
+        
+        livesText.transform.DOPunchScale(Vector3.one * 0.4f, 0.21f);
     }
 
     public void OnRunClicked()

@@ -215,6 +215,11 @@ public class Wagon : MonoBehaviour
 
         Instantiate(effect, transform.position, Quaternion.identity);
 
+        if (!RemoveReasons.IsGood(reason) && WagonType == WagonType.Locomotive)
+        {
+            GameController.Instance.Stats.AddLife(-1);
+        }
+        
         Destroy(gameObject);
         
     }
