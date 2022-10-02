@@ -199,17 +199,13 @@ public class GameController : MonoBehaviour
 
     public void OnRun()
     {
-        if (Mode == GameMode.Sort)
-        {
-            // Dev ability to restart the game
+        BuildCursor.SetActive(false);
+        SetMode(GameMode.Sort);
+    }
 
-            PrepareForWave();
-        }
-        else
-        {
-            BuildCursor.SetActive(false);
-            SetMode(GameMode.Sort);
-        }
+    public void OnBuild()
+    {
+        PrepareForWave();
     }
 
     private void SpawnStation()

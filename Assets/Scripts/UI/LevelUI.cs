@@ -4,17 +4,20 @@ using System.Collections.Generic;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class LevelUI : MonoBehaviour
 {
     public static LevelUI Instance;
     
-    [SerializeField] private TextMeshProUGUI runButtonText;
     [SerializeField] private TextMeshProUGUI scoreText;
     [SerializeField] private TextMeshProUGUI livesText;
     [SerializeField] private TextMeshProUGUI waveText;
     [SerializeField] private TextMeshProUGUI trainsText;
 
+    [SerializeField] private Button buttonRun;
+    [SerializeField] private Button buttonBuild;
+    
     private void Awake()
     {
         Instance = this;
@@ -35,10 +38,19 @@ public class LevelUI : MonoBehaviour
 
     private void SetWave()
     {
-        waveText.SetText($"Wave: {LevelScenario.Instance.WaveIndex}");
+        waveText.SetText($"Wave: {LevelScenario.Instance.WaveIndex + 1}");
         
-        runButtonText.SetText(GameController.Instance.Mode == GameController.GameMode.Build ? "Run" : "Stop");
-
+        if (GameController.Instance.Mode == GameController.GameMode.Build)
+        {
+            buttonRun.gameObject.SetActive(true);
+            buttonBuild.gameObject.SetActive(false);
+        }
+        else
+        {
+            buttonRun.gameObject.SetActive(false);
+            buttonBuild.gameObject.SetActive(true);
+        }
+        
         SetTrains();
     }
 
@@ -78,8 +90,11 @@ public class LevelUI : MonoBehaviour
     public void OnRunClicked()
     {
         GameController.Instance.OnRun();
-
-        runButtonText.SetText(GameController.Instance.Mode == GameController.GameMode.Build ? "Run" : "Stop");
+    }
+    
+    public void OnBuildClicked()
+    {
+        GameController.Instance.OnBuild();
     }
 
     public void OnSkipClicked()
