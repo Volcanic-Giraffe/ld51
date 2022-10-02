@@ -193,6 +193,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1395ddf24f844fdba32d89d9b525a46, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  SpawnTime: 10
   Mode: 0
   RoadTilePrefabs:
   - {fileID: 6354120432888080250, guid: 52b78797d707be24ab820584884e3006, type: 3}

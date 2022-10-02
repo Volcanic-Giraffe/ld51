@@ -8,6 +8,8 @@ public class GameController : MonoBehaviour
 {
     public static GameController Instance;
 
+    public float SpawnTime = 10f;
+
     public GameMode Mode = GameMode.Build;
     private Camera _camera;
 
@@ -18,6 +20,8 @@ public class GameController : MonoBehaviour
     public Wagon WagonPrefab;
     public Wagon LocomotivePrefab;
 
+    private float _timer;
+    
     private void Awake()
     {
         Instance = this;
@@ -108,10 +112,23 @@ public class GameController : MonoBehaviour
                 
                 break;
             case GameMode.Sort:
+                UpdateSort();
                 break;
         }
 
         _leftMouseWasDown = leftMouseDown;
+    }
+
+    private void UpdateSort()
+    {
+        _timer -= Time.deltaTime;
+
+        if (_timer <= 0)
+        {
+            _timer = SpawnTime;
+            
+            SpawnTrain();
+        }
     }
 
     void BuildRoad(GridCell cell)
@@ -130,15 +147,31 @@ public class GameController : MonoBehaviour
 
     public void OnRun()
     {
-        if (Mode == GameMode.Sort) return;
-        Mode = GameMode.Sort;
-        SpawnTrain();
+        if (Mode == GameMode.Sort)
+        {
+            // Dev ability to restart the game
+            
+            Mode = GameMode.Build;
+
+            var wagons = FindObjectsOfType<Wagon>();
+
+            for (var i = wagons.Length - 1; i >= 0; i--)
+            {
+                var wagon = wagons[i];
+                
+                Destroy(wagon.gameObject);
+            }
+        }
+        else
+        {
+            Mode = GameMode.Sort;
+            _timer = SpawnTime * 0.1f;
+        }
     }
 
     private void SpawnTrain()
     {
         if (Mode == GameMode.Build) return;
-        Invoke(nameof(SpawnTrain), 10.0f);
 
         var newTrain = ProduceWagon(WagonType.Locomotive);
         newTrain.transform.position = MoonGrid.Instance.CenterOfTile(MoonGrid.Instance.EnterPoint + Vector2Int.left * 3);
