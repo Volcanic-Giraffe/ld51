@@ -19,7 +19,8 @@ public class Wagon : MonoBehaviour
     public Vector2Int Direction = Vector2Int.right;
 
     [Space]
-    public GameObject RemoveEffect;
+    public GameObject RemoveEffectGood;
+    public GameObject RemoveEffectBad;
     
     private Rigidbody _rigidBody;
 
@@ -42,7 +43,10 @@ public class Wagon : MonoBehaviour
 
     private void Update()
     {
-        
+        if (_trainHead == null || _trainHead.WagonType != WagonType.Locomotive)
+        {
+            RemoveFromTrain(RemoveReason.LostLocomotive);
+        }
     }
 
     private RoadTile _previousRoad = null;
@@ -136,7 +140,7 @@ public class Wagon : MonoBehaviour
         _trainHead.Speed = _baseSpeed;
     }
 
-    public void RemoveFromTrain()
+    public void RemoveFromTrain(RemoveReason reason)
     {
         if (RearWagon != null)
         {
@@ -149,8 +153,11 @@ public class Wagon : MonoBehaviour
         }
 
         // todo: move positions on tail wagons
-        Instantiate(RemoveEffect, transform.position, Quaternion.identity);
-        
+
+        var effect = RemoveReasons.IsGood(reason) ? RemoveEffectGood : RemoveEffectBad;
+
+        Instantiate(effect, transform.position, Quaternion.identity);
+
         Destroy(gameObject);
         
     }
@@ -209,8 +216,11 @@ public class Wagon : MonoBehaviour
             var wagon = other.GetComponentInParent<Wagon>();
 
             if (HasWagon(wagon)) return;
-            
-            wagon.SlowDown();
+
+            if (WagonType == WagonType.Locomotive)
+            {
+                wagon.RemoveFromTrain(RemoveReason.Collision);
+            }
         }
     }
     private void OnTriggerExit(Collider other)
@@ -221,7 +231,7 @@ public class Wagon : MonoBehaviour
 
             if (HasWagon(wagon)) return;
             
-            wagon.SpeedUp();
+            // wagon.SpeedUp();
         }
     }
 }

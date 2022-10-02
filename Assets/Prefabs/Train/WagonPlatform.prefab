@@ -138,10 +138,12 @@ MonoBehaviour:
   Rotator: {fileID: 7728094142624802244}
   FrontWagon: {fileID: 0}
   RearWagon: {fileID: 0}
-  RemoveEffect: {fileID: 8792220831579243768, guid: 0a0672e668d945247a5e0601884af0f7,
-    type: 3}
   Speed: 3
   Direction: {x: 1, y: 0}
+  RemoveEffectGood: {fileID: 8792220831579243768, guid: 0a0672e668d945247a5e0601884af0f7,
+    type: 3}
+  RemoveEffectBad: {fileID: 8792220831579243768, guid: 824c560b67fb6ad48b1c09a7e57f8d47,
+    type: 3}
 --- !u!135 &6349640305546798155
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -153,7 +155,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.75
+  m_Radius: 0.6
   m_Center: {x: 0, y: 0, z: -1}
 --- !u!1001 &3373622220726414922
 PrefabInstance:

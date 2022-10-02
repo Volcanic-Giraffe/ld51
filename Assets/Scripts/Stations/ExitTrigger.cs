@@ -14,13 +14,13 @@ public class ExitTrigger : MonoBehaviour
 
             if (wagon.WagonType == WagonType.Locomotive && wagon.TrainSize() == 1)
             {
-                wagon.RemoveFromTrain();
+                wagon.RemoveFromTrain(RemoveReason.ExitGood);
                 
                 GameController.Instance.Stats.AddScore(Const.ScoreSoloLocomotiveExit);
             }
             else
             {
-                wagon.RemoveFromTrain();
+                wagon.RemoveFromTrain(RemoveReason.ExitBad);
                 GameController.Instance.Stats.AddScore( Const.ScorePerWagonExit);
             }
         }

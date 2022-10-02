@@ -120,7 +120,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5063227644087644244}
   m_Layer: 0
-  m_Name: RemoveEffect
+  m_Name: RemoveEffectGood
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
