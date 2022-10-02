@@ -335,7 +335,12 @@ PrefabInstance:
     - target: {fileID: 6423181379752960148, guid: bb57948d1efbfe045960f23bbe78fa84,
         type: 3}
       propertyPath: WarpScale
-      value: 1
+      value: 238.73
+      objectReference: {fileID: 0}
+    - target: {fileID: 6423181379752960148, guid: bb57948d1efbfe045960f23bbe78fa84,
+        type: 3}
+      propertyPath: yHarmonic1
+      value: 0.052
       objectReference: {fileID: 0}
     - target: {fileID: 6423181379752960148, guid: bb57948d1efbfe045960f23bbe78fa84,
         type: 3}
@@ -346,6 +351,16 @@ PrefabInstance:
         type: 3}
       propertyPath: perlinScale2
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6423181379752960148, guid: bb57948d1efbfe045960f23bbe78fa84,
+        type: 3}
+      propertyPath: WarpScaleGradient
+      value: 2.46
+      objectReference: {fileID: 0}
+    - target: {fileID: 6423181379752960148, guid: bb57948d1efbfe045960f23bbe78fa84,
+        type: 3}
+      propertyPath: WarpScaleYModGradient
+      value: 3.53
       objectReference: {fileID: 0}
     - target: {fileID: 6423181379752960149, guid: bb57948d1efbfe045960f23bbe78fa84,
         type: 3}
