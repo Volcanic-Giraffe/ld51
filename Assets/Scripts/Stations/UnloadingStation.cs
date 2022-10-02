@@ -16,6 +16,8 @@ public class UnloadingStation : MonoBehaviour
             if (wagon.WagonType == WagonType && wagon.IsLastWagon())
             {
                 wagon.RemoveFromTrain();
+                
+                GameController.Instance.Stats.AddScore(10);
             }
         }
     }

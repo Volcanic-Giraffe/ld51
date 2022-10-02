@@ -22,8 +22,12 @@ public class GameController : MonoBehaviour
     
     private float _timer;
     
+    public PlayerStats Stats { get; private set; }
+
     private void Awake()
     {
+        Stats = new PlayerStats();
+        
         Instance = this;
         _camera = Camera.main;
     }
