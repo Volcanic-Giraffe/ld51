@@ -327,6 +327,7 @@ public class Wagon : MonoBehaviour
         }
     }
 
+#if UNITY_EDITOR
     private void OnDrawGizmos()
     {
         foreach (var vi in _checkedPoints)
@@ -335,4 +336,6 @@ public class Wagon : MonoBehaviour
         }
         Handles.Label(transform.position, $"Speed={_currentSpeed} Dir={Direction}");
     }
+#endif
+
 }

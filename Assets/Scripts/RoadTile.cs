@@ -104,6 +104,7 @@ public class RoadTile : MonoBehaviour
     private static Vector3[] U2D = { new(0, 0.6f), new(0, -0.6f), };
     private static Vector3[] D2U = U2D.Reverse().ToArray();
 
+#if UNITY_EDITOR
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.cyan;
@@ -112,6 +113,7 @@ public class RoadTile : MonoBehaviour
             Gizmos.DrawLine(L2D[i], L2D[i+1]);
         }
     }
+#endif
 
     public Vector3[] Rotation(Vector2Int from, Vector2Int to)
     {
