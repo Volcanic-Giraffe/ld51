@@ -37,4 +37,8 @@ public static class Extebnsions
         return collection.Length == 0 ? default : collection[Random.Range(0, collection.Length)];
     }
 
+    public static IEnumerable<T> Shuffle<T>(this IEnumerable<T> source)
+    {
+        return source.OrderBy(x => Guid.NewGuid());
+    }
 }

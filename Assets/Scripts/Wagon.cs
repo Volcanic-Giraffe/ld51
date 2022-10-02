@@ -15,11 +15,15 @@ public class Wagon : MonoBehaviour
     public Wagon FrontWagon;
     public Wagon RearWagon;
     
-    private Rigidbody _rigidBody;
-
     public float Speed;
     public Vector2Int Direction = Vector2Int.right;
 
+    [Space]
+    public GameObject RemoveEffect;
+    
+    private Rigidbody _rigidBody;
+
+    // Basically a locomotive of this train.
     private Wagon _trainHead;
 
     private float _baseSpeed;
@@ -146,8 +150,10 @@ public class Wagon : MonoBehaviour
 
         // todo: move positions on tail wagons
         // todo: add score!
-
+        Instantiate(RemoveEffect, transform.position, Quaternion.identity);
+        
         Destroy(gameObject);
+        
     }
 
     public bool IsLastWagon()

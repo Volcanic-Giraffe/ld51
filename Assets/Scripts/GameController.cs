@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class GameController : MonoBehaviour
 {
@@ -177,7 +178,11 @@ public class GameController : MonoBehaviour
         newTrain.transform.position = MoonGrid.Instance.CenterOfTile(MoonGrid.Instance.EnterPoint + Vector2Int.left * 3);
 
         var types = new List<WagonType>() { WagonType.Green, WagonType.Blue, WagonType.Red };
-
+        types = types.Shuffle().ToList();
+        
+        if (Random.value < 0.4f) types.RemoveAt(0);
+        if (Random.value < 0.4f) types.RemoveAt(0);
+        
         foreach (var wType in types)
         {
             newTrain.AddNewWagon(wType);
