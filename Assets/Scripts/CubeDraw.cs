@@ -33,6 +33,7 @@ public class CubeDraw : MonoBehaviour
     {
         CubeList.ForEach(k => Destroy(k));
         CubeList.Clear();
+        // jsut Meshes will be much easier on performance. Maybe even a single mesh
         CubeGrid = new GameObject[CubeWidth, CubeHeight, CubeDepth];
 
         for (int i = 0; i < CubeWidth; i++)
