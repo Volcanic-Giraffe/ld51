@@ -18,6 +18,8 @@ public class GameController : MonoBehaviour
 
     public List<WagonPrefab> WagonPrefabs;
 
+    public List<UnloadingStation> StationPrefabs;
+    
     private float _timer;
     
     private void Awake()

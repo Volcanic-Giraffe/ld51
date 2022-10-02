@@ -216,8 +216,10 @@ MonoBehaviour:
     Wagon: {fileID: 1185076814134669511, guid: 578d226150a74164098efa3c7fe2e8df, type: 3}
   - Type: 3
     Wagon: {fileID: 500996488675293276, guid: 92e5edd0c10ee324fa7032e83df483a7, type: 3}
-  WagonPrefab: {fileID: 0}
-  LocomotivePrefab: {fileID: 0}
+  StationPrefabs:
+  - {fileID: 1289958936872024237, guid: 65aa4b22d2e9cd04680b6e03b6bb1823, type: 3}
+  - {fileID: 6282013604703492871, guid: 8d4656a8c28c98044a2f22685020fdf9, type: 3}
+  - {fileID: 2825137523697492498, guid: a9fec7b1bac6e014598db621db849a02, type: 3}
 --- !u!1001 &9089180748965263666
 PrefabInstance:
   m_ObjectHideFlags: 0
