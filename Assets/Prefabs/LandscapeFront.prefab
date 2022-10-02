@@ -57,8 +57,10 @@ MonoBehaviour:
   perlinScale2: 1.53
   PerspectiveScaleMod: 1
   PerspectivePowScale: 5
-  WarpScale: 300
+  WarpScale: 200
+  WarpScaleGradient: 2
   WarpScaleYMod: 1
+  WarpScaleYModGradient: 1
 --- !u!33 &6423181379752960149
 MeshFilter:
   m_ObjectHideFlags: 0

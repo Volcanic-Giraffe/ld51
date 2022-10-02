@@ -59,28 +59,28 @@ public class CubeDraw : MonoBehaviour
     void Update()
     {
         
-        for (int i = 0; i < CubeWidth; i++)
-        {
-            for (int j = 0; j < CubeHeight; j++)
-            {
-                var tVal = 2 + Mathf.Sin(j + Time.realtimeSinceStartup);
-                for (int k = 0; k < CubeDepth; k++)
-                {
-                    var c = CubeGrid[i, j, k];
-                    c.transform.localPosition = new Vector3(
-                      (i - (int)(CubeWidth * 0.5)) * Distance + tVal,
-                      (j - (int)(CubeHeight * 0.5)) * Distance + tVal,
-                      (k - (int)(CubeDepth * 0.5)) * Distance + tVal);
-                    c.transform.Rotate(new Vector3(Time.deltaTime * -RotationX * 0.7f, Time.deltaTime * -RotationY * 1.2f, 0));
-                    //if(i % 3 == 0 && j % 3 == 0)
-                    //{
-                    //    var tVal = 2 + Mathf.Sin(k+10*Time.realtimeSinceStartup);
-                    //    c.transform.localScale = new Vector3(tVal, tVal, tVal);
-                    //}
-                    c.transform.localScale = new Vector3(tVal*0.5f, tVal * 0.5f, tVal * 0.5f);
-                }
-            }
-        }
+        //for (int i = 0; i < CubeWidth; i++)
+        //{
+        //    for (int j = 0; j < CubeHeight; j++)
+        //    {
+        //        var tVal = 2 + Mathf.Sin(j + Time.realtimeSinceStartup);
+        //        for (int k = 0; k < CubeDepth; k++)
+        //        {
+        //            var c = CubeGrid[i, j, k];
+        //            c.transform.localPosition = new Vector3(
+        //              (i - (int)(CubeWidth * 0.5)) * Distance + tVal,
+        //              (j - (int)(CubeHeight * 0.5)) * Distance + tVal,
+        //              (k - (int)(CubeDepth * 0.5)) * Distance + tVal);
+        //            c.transform.Rotate(new Vector3(Time.deltaTime * -RotationX * 0.7f, Time.deltaTime * -RotationY * 1.2f, 0));
+        //            //if(i % 3 == 0 && j % 3 == 0)
+        //            //{
+        //            //    var tVal = 2 + Mathf.Sin(k+10*Time.realtimeSinceStartup);
+        //            //    c.transform.localScale = new Vector3(tVal, tVal, tVal);
+        //            //}
+        //            c.transform.localScale = new Vector3(tVal*0.5f, tVal * 0.5f, tVal * 0.5f);
+        //        }
+        //    }
+        //}
         this.transform.Rotate(new Vector3(Time.deltaTime * RotationX*0.1f, Time.deltaTime * RotationY * 0.1f, 0));
         
     }

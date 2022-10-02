@@ -22,7 +22,10 @@ public class LandscapeMesh : MonoBehaviour
     // more compact towards far end
     public float PerspectivePowScale = 2f;
     public float WarpScale = 1f;
+    public float WarpScaleGradient = 2f;
     public bool WarpScaleYMod = true;
+    // more compact towards far end
+    public float WarpScaleYModGradient = 2f;
 
     void Awake()
     {
@@ -48,7 +51,7 @@ public class LandscapeMesh : MonoBehaviour
             for (int x = 0; x <= xSize; x++, i++)
             {
                 var xNorm = (float)x / (float)xSize;
-                var warpCoeff = Mathf.Pow(Mathf.Abs(0.5f - xNorm), 2f) * WarpScale * (WarpScaleYMod ? yNorm : 1f);
+                var warpCoeff = Mathf.Pow(Mathf.Abs(0.5f - xNorm), WarpScaleGradient) * WarpScale * (WarpScaleYMod ? Mathf.Pow(yNorm, WarpScaleYModGradient) : 1f);
 
                 vertices[i] = new Vector3(x * unitSize + (xNorm - 0.5f) * warpCoeff, y * unitSize, -1 * (Perlin(seed, x, y, xHarmonic1, yHarmonic1, perlinScale1 * yScale) + Perlin(seed, x, y, xHarmonic2, yHarmonic2, perlinScale2 * yScale)) + warpCoeff);
                 uv[i] = new Vector2((float)x / xSize, (float)y / ySize);

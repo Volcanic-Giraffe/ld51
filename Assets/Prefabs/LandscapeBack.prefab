@@ -58,7 +58,9 @@ MonoBehaviour:
   PerspectiveScaleMod: 1
   PerspectivePowScale: 2
   WarpScale: 400
+  WarpScaleGradient: 2
   WarpScaleYMod: 0
+  WarpScaleYModGradient: 1
 --- !u!33 &1311792154758818475
 MeshFilter:
   m_ObjectHideFlags: 0
