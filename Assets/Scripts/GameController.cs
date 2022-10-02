@@ -227,7 +227,7 @@ public class GameController : MonoBehaviour
             {
                 var newStation = Instantiate(StationPrefabs[i % StationPrefabs.Count]);
 
-                var cell = MoonGrid.Instance.RandomFreeCell();
+                var cell = MoonGrid.Instance.RandomFreeCell(2);
 
                 newStation.transform.position = cell.transform.position;
                 cell.Busy = false; // busy makes impossible to place roads.

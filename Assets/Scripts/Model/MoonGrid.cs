@@ -22,7 +22,7 @@ public class MoonGrid : MonoBehaviour
     {
         Instance = this;
         _camera = Camera.main;
-        
+
         _cells = new GridCell[Width, Height];
         for (int x = 0; x < Width; x++)
         {
@@ -47,14 +47,14 @@ public class MoonGrid : MonoBehaviour
 
     public Vector2Int XY(Vector3 vector)
     {
-        return new Vector2Int(Mathf.FloorToInt(vector.x), Mathf.FloorToInt(vector.y));        
+        return new Vector2Int(Mathf.FloorToInt(vector.x), Mathf.FloorToInt(vector.y));
     }
 
     public Vector2Int XY(GameObject go)
     {
         return XY(go.transform);
     }
-    
+
     public Vector2Int XY(MonoBehaviour go)
     {
         return XY(go.transform);
@@ -91,15 +91,15 @@ public class MoonGrid : MonoBehaviour
         return !tile.Busy;
     }
 
-    public GridCell RandomFreeCell()
+    public GridCell RandomFreeCell(int borderOffset = 0)
     {
         var list = new List<GridCell>();
-        
-        for (int x = 0; x < Width; x++)
+
+        for (int x = borderOffset; x < Width - borderOffset; x++)
         {
-            for (int y = 0; y < Height; y++)
+            for (int y = borderOffset; y < Height - borderOffset; y++)
             {
-                if (!_cells[x, y].Busy) list.Add(_cells[x,y]);
+                if (!_cells[x, y].Busy) list.Add(_cells[x, y]);
             }
         }
 
@@ -108,7 +108,7 @@ public class MoonGrid : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        
+
         for (int x = 0; x < Width; x++)
         {
             for (int y = 0; y < Height; y++)
@@ -141,7 +141,7 @@ public class MoonGrid : MonoBehaviour
                     var rs = tile.Road.GetComponentInChildren<RoadSwitch>();
                     if (rs != null && rs.HasTrainOnTop)
                     {
-                        Gizmos.color = Color.red.WithAlpha(0.8f);;
+                        Gizmos.color = Color.red.WithAlpha(0.8f); ;
                     }
                 }
 
@@ -153,5 +153,5 @@ public class MoonGrid : MonoBehaviour
         Gizmos.DrawSphere(CenterOfTile(EnterPoint), 0.5f);
     }
 
-    
+
 }
