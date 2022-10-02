@@ -16,6 +16,14 @@ public class RoadTile : MonoBehaviour
         RoadSwitch = GetComponentInChildren<RoadSwitch>();
     }
 
+    public void ToggleIfCan()
+    {
+        if (RoadSwitch != null)
+        {
+            RoadSwitch.Toggle();
+        }
+    }
+
     private void Start()
     {
         if (RoadSwitch != null) RoadSwitch.SetAllowedConnections(Type);

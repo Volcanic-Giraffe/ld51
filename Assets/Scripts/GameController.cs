@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -19,15 +18,15 @@ public class GameController : MonoBehaviour
     public List<WagonPrefab> WagonPrefabs;
 
     public List<UnloadingStation> StationPrefabs;
-    
+
     private float _timer;
-    
+
     public PlayerStats Stats { get; private set; }
 
     private void Awake()
     {
         Stats = new PlayerStats();
-        
+
         Instance = this;
         _camera = Camera.main;
     }
@@ -40,37 +39,49 @@ public class GameController : MonoBehaviour
             if (cell == null) continue;
             cell.Road = road;
         }
+
         RecalculateRoads();
     }
 
     public enum GameMode
     {
-        Build, Sort
+        Build,
+        Sort
     }
 
     private bool _leftMouseWasDown = false;
 
     enum DragTo
     {
-        Nothing, Clear, Build
+        Nothing,
+        Clear,
+        Build
     }
 
     private DragTo _dragTo = DragTo.Nothing;
+
     private void Update()
     {
+        Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+        Vector3 mouseWorldPosition = new Vector3(-5, -5, 0);
+        if (Physics.Raycast(ray, out hit, 100f, LayerMask.GetMask("Cell")))
+        {
+            mouseWorldPosition = hit.transform.position;
+        }
+
         var leftMouseDown = Input.GetMouseButton(0);
+        
+        Vector2Int xy = MoonGrid.Instance.XY(mouseWorldPosition);
+        foreach (var tile in MoonGrid.Instance.Cells)
+        {
+            tile.Highlighted = MoonGrid.Instance.XY(tile) == xy;
+        }
+        
         switch (Mode)
         {
             case GameMode.Build:
-                var mousePosition = Input.mousePosition;
-                mousePosition.z = -_camera.transform.position.z;
-                Vector3 worldPosition = _camera.ScreenToWorldPoint(mousePosition);
-                worldPosition.z = 0;
-                Vector2Int xy = MoonGrid.Instance.XY(worldPosition);
-                foreach (var tile in MoonGrid.Instance.Cells)
-                {
-                    tile.Highlighted = MoonGrid.Instance.XY(tile) == xy;
-                }
+            {
 
                 var thisCell = MoonGrid.Instance.GetCell(xy);
                 if (!_leftMouseWasDown && leftMouseDown)
@@ -112,12 +123,25 @@ public class GameController : MonoBehaviour
                     //we are up
                     _dragTo = DragTo.Nothing;
                 }
-                
-                
+
+
                 break;
+            }
             case GameMode.Sort:
+            {
+                var thisCell = MoonGrid.Instance.GetCell(xy);
+                if (thisCell != null && thisCell.HasRoad)
+                {
+                    if (!_leftMouseWasDown && leftMouseDown)
+                    {
+                        thisCell.Road.ToggleIfCan();
+                    }
+                }
+
+
                 UpdateSort();
                 break;
+            }
         }
 
         _leftMouseWasDown = leftMouseDown;
@@ -130,7 +154,7 @@ public class GameController : MonoBehaviour
         if (_timer <= 0)
         {
             _timer = SpawnTime;
-            
+
             SpawnTrain();
         }
     }
@@ -144,7 +168,7 @@ public class GameController : MonoBehaviour
     void RemoveRoad(GridCell cell)
     {
         var road = cell.Road;
-        Destroy(road.gameObject);   
+        Destroy(road.gameObject);
         cell.Road = null;
         RecalculateRoads();
     }
@@ -154,7 +178,7 @@ public class GameController : MonoBehaviour
         if (Mode == GameMode.Sort)
         {
             // Dev ability to restart the game
-            
+
             Mode = GameMode.Build;
 
             var wagons = FindObjectsOfType<Wagon>();
@@ -162,7 +186,7 @@ public class GameController : MonoBehaviour
             for (var i = wagons.Length - 1; i >= 0; i--)
             {
                 var wagon = wagons[i];
-                
+
                 Destroy(wagon.gameObject);
             }
         }
@@ -178,14 +202,15 @@ public class GameController : MonoBehaviour
         if (Mode == GameMode.Build) return;
 
         var newTrain = ProduceWagon(WagonType.Locomotive);
-        newTrain.transform.position = MoonGrid.Instance.CenterOfTile(MoonGrid.Instance.EnterPoint + Vector2Int.left * 3);
+        newTrain.transform.position =
+            MoonGrid.Instance.CenterOfTile(MoonGrid.Instance.EnterPoint + Vector2Int.left * 3);
 
         var types = new List<WagonType>() { WagonType.Green, WagonType.Blue, WagonType.Red };
         types = types.Shuffle().ToList();
-        
+
         if (Random.value < 0.4f) types.RemoveAt(0);
         if (Random.value < 0.4f) types.RemoveAt(0);
-        
+
         foreach (var wType in types)
         {
             newTrain.AddNewWagon(wType);
@@ -254,9 +279,8 @@ public class GameController : MonoBehaviour
             {
                 type = ConnectionType.TripleRDL;
             }
-            
+
             SetRoad(cell, type);
-            
         }
     }
 

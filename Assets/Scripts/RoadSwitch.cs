@@ -6,22 +6,56 @@ public class RoadSwitch : MonoBehaviour
     Vector2Int _direction;
     private ConnectionType connection;
     private SpriteRenderer _sr;
+    private bool _isWagonOnTop;
+    private float _enableTimeRemaining = 0;
+    private GridCell _mycell;
 
     public Vector2Int Direction { get => _direction; }
 
+    public bool HasTrainOnTop => _isWagonOnTop;
+    
     private void Awake()
     {
         _sr = GetComponent<SpriteRenderer>();
         _direction = Vector2Int.right;
     }
 
-    void OnMouseDown()
+    private void Start()
     {
-        Toggle();
+        _mycell = MoonGrid.Instance.GetCell(MoonGrid.Instance.XY(transform.position));
+    }
+
+    private void FixedUpdate()
+    {
+        var isOnTop = Physics.Raycast(transform.position, Vector3.back, 1f, LayerMask.GetMask("Wagon"), QueryTriggerInteraction.Collide);
+        if (isOnTop)
+        {
+            _enableTimeRemaining = 1f;
+        }
+    }
+
+    private void Update()
+    {
+        if (_enableTimeRemaining > 0)
+        {
+            _enableTimeRemaining -= Time.deltaTime;
+            _isWagonOnTop = true;
+        }
+        else
+        {
+            _isWagonOnTop = false;
+        }
+        transform.localScale = _mycell.Highlighted ? new Vector3(2, 2, 2) : Vector3.one;
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawRay(transform.position, Vector3.back);
     }
 
     public void Toggle()
     {
+        if (_isWagonOnTop) return;
         if (_direction == Vector2Int.up)
         {
             _direction = connection == ConnectionType.TripleDLU ? Vector2Int.down : _direction = Vector2Int.right;
