@@ -28,10 +28,13 @@ public class Wagon : MonoBehaviour
     private Wagon _trainHead;
 
     private float _baseSpeed;
+
+    private float _currentSpeed;
     
     private void Awake()
     {
         _baseSpeed = Speed;
+        _currentSpeed = Speed;
         
         _rigidBody = GetComponent<Rigidbody>();
     }
@@ -47,9 +50,21 @@ public class Wagon : MonoBehaviour
         {
             RemoveFromTrain(RemoveReason.LostLocomotive);
         }
+
+        if (Mathf.Abs(_currentSpeed - Speed) > 0.05f)
+        {
+            var delta = Speed - _currentSpeed;
+            if (Mathf.Abs(delta) > 0.2f)
+            {
+                delta = MathF.Sign(delta) * 0.2f;
+            }
+
+            _currentSpeed += delta;
+        }
     }
 
     private RoadTile _previousRoad = null;
+    private Vector2Int _fromPrevious;
 
     private void FixedUpdate()
     {
@@ -63,14 +78,32 @@ public class Wagon : MonoBehaviour
         }
         else if (myCell != null && myCell.HasRoad)
         {
-                                     
             var roadIamAt = myCell.Road;
             if (roadIamAt != _previousRoad)
             {
-                var from = _previousRoad != null ? MoonGrid.Instance.XY(_previousRoad) - myXY : Vector2Int.left;
+                _fromPrevious = _previousRoad != null ? MoonGrid.Instance.XY(_previousRoad) - myXY : Vector2Int.left;
                 //my new direction
-                Direction = roadIamAt.Direction(from, this);
-                //Debug.Log($"Switch diration of {this} to {Direction} (from = {from})");
+                Direction = roadIamAt.Direction(_fromPrevious, this);
+
+            }
+
+            if (IsFirstWagon())
+            {
+                var cellsToObstacle = CellsToObstacle(myXY, _fromPrevious, 5);
+
+                if (cellsToObstacle <= 1)
+                {
+                    Stop();
+                }
+                else if (cellsToObstacle <= 3)
+                {
+                    SlowDown();
+                }
+                else
+                {
+                    SpeedUp();
+                }
+
             }
 
             _previousRoad = roadIamAt;
@@ -78,10 +111,11 @@ public class Wagon : MonoBehaviour
         else
         {
             Debug.Log("Strange.....");
+            Stop();
         }
 
         var targetCell = MoonGrid.Instance.CenterOfTile(myXY + Direction);
-        var newLoc = transform.position + (targetCell - transform.position).normalized * (_trainHead.Speed * Time.fixedDeltaTime);
+        var newLoc = transform.position + (targetCell - transform.position).normalized * (_trainHead._currentSpeed * Time.fixedDeltaTime);
         newLoc.z = 0;
         _rigidBody.MovePosition(newLoc);
             
@@ -90,6 +124,18 @@ public class Wagon : MonoBehaviour
 
         Rotator.eulerAngles = new Vector3(0, 0, angleS);
     }
+
+    private int CellsToObstacle(Vector2Int xy, Vector2Int from, int max)
+    {
+        if (max == 0) return 0;
+        var cell = MoonGrid.Instance.GetCell(xy);
+        if (cell == null || !cell.HasRoad) return 0;
+        var newDirection = cell.Road.Direction(from);
+        if (newDirection == Vector2Int.zero) return 0;
+        return 1 + CellsToObstacle(xy + newDirection, -newDirection, max - 1);
+
+    }
+    
 
     public void AddNewWagon(WagonType type)
     {
@@ -138,6 +184,11 @@ public class Wagon : MonoBehaviour
     public void SpeedUp()
     {
         _trainHead.Speed = _baseSpeed;
+    }
+
+    public void Stop()
+    {
+        _trainHead.Speed = 0;
     }
 
     public void RemoveFromTrain(RemoveReason reason)
