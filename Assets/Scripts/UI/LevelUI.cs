@@ -44,7 +44,14 @@ public class LevelUI : MonoBehaviour
 
     private void SetTrains()
     {
-        trainsText.SetText($"Trains Left: {LevelScenario.Instance.TrainsLeft}");
+        var newVal = $"{LevelScenario.Instance.TrainsLeft}";
+
+        if (newVal != trainsText.text)
+        {
+            trainsText.SetText(newVal);
+            // too much
+            // trainsText.transform.DOPunchScale(Vector3.one * 0.2f, 0.18f).SetDelay(0.34f);
+        }
     }
     
     private void SetScore(int score, int change)
@@ -63,7 +70,7 @@ public class LevelUI : MonoBehaviour
 
     private void SetLives(int lives, int change)
     {
-        livesText.SetText($"Lives: {lives}");
+        livesText.SetText($"{lives}");
         
         livesText.transform.DOPunchScale(Vector3.one * 0.4f, 0.21f);
     }
