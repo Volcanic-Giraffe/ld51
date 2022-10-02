@@ -8,8 +8,6 @@ public class GameController : MonoBehaviour
 {
     public static GameController Instance;
 
-    public float SpawnTime = 10f;
-
     public GameMode Mode = GameMode.Build;
     private Camera _camera;
 
@@ -18,10 +16,6 @@ public class GameController : MonoBehaviour
     public List<WagonPrefab> WagonPrefabs;
 
     public List<UnloadingStation> StationPrefabs;
-
-    private float _timer;
-
-    public event Action OnEveryTenSeconds;
 
     public PlayerStats Stats { get; private set; }
 
@@ -50,6 +44,9 @@ public class GameController : MonoBehaviour
 
         RecalculateRoads();
         SpawnStation();
+
+        LevelScenario.Instance.OnWaveBegin += PrepareForWave;
+        LevelScenario.Instance.OnEveryTenSeconds += OnWaveUpdate;
     }
 
     public enum GameMode
@@ -149,8 +146,6 @@ public class GameController : MonoBehaviour
                         }
                     }
 
-
-                    UpdateSort();
                     break;
                 }
         }
@@ -158,24 +153,25 @@ public class GameController : MonoBehaviour
         _leftMouseWasDown = leftMouseDown;
     }
 
-    private void UpdateSort()
+    public void PrepareForWave()
     {
-        _timer -= Time.deltaTime;
+        SpawnStation();
+        
+        Mode = GameMode.Build;
+        BuildCursor.SetActive(true);
+        var wagons = FindObjectsOfType<Wagon>();
 
-        if (_timer <= 0)
+        for (var i = wagons.Length - 1; i >= 0; i--)
         {
-            _timer = SpawnTime;
+            var wagon = wagons[i];
 
-            SpawnStation();
-            SpawnTrain();
-
-            OnEveryTenSeconds?.Invoke();
+            Destroy(wagon.gameObject);
         }
     }
 
     public void OnWaveUpdate()
     {
-        SpawnStation();
+        SpawnTrain();
     }
 
     void BuildRoad(GridCell cell)
@@ -198,22 +194,12 @@ public class GameController : MonoBehaviour
         {
             // Dev ability to restart the game
 
-            Mode = GameMode.Build;
-            BuildCursor.SetActive(true);
-            var wagons = FindObjectsOfType<Wagon>();
-
-            for (var i = wagons.Length - 1; i >= 0; i--)
-            {
-                var wagon = wagons[i];
-
-                Destroy(wagon.gameObject);
-            }
+            PrepareForWave();
         }
         else
         {
             BuildCursor.SetActive(false);
             Mode = GameMode.Sort;
-            _timer = SpawnTime * 0.1f;
         }
     }
 

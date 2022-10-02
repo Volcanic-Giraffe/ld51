@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class LevelScenario : MonoBehaviour
 {
+    public static float SpawnTime = 10f;
+    
     public static LevelScenario Instance;
     
     [SerializeField] private List<WaveConfig> waves;
@@ -12,8 +14,17 @@ public class LevelScenario : MonoBehaviour
     public WaveConfig Wave { get; private set; }
     public int WaveIndex { get; private set; }
     
-    public int WaveRepeat { get; private set; }
+    public int TrainNumber { get; private set; }
+    public int TrainsTotal => Wave.Repeats;
 
+    public int TrainsLeft => Wave.Repeats - TrainNumber;
+
+    public event Action OnWaveBegin;
+    public event Action OnEveryTenSeconds;
+
+
+    private float _timer;
+    
     private void Awake()
     {
         Instance = this;
@@ -24,24 +35,43 @@ public class LevelScenario : MonoBehaviour
 
     void Start()
     {
-        GameController.Instance.OnEveryTenSeconds += UpdateWave;
+        
+    }
+
+    private void Update()
+    {
+        if (GameController.Instance.Mode == GameController.GameMode.Build) return;
+        
+        _timer -= Time.deltaTime;
+
+        if (_timer < 0)
+        {
+            _timer = SpawnTime;
+
+            UpdateWave();
+        }
     }
 
     public void UpdateWave()
     {
-        WaveRepeat += 1;
+        TrainNumber += 1;
 
-        if (WaveRepeat > Wave.Repeats)
+        if (TrainNumber > Wave.Repeats)
         {
             WaveIndex += 1;
 
             Wave = waves[Math.Min(WaveIndex, waves.Count - 1)];
-            WaveRepeat = 0;
-        }
+            TrainNumber = 0;
 
-        GameController.Instance.OnWaveUpdate();
+            _timer = SpawnTime * 0.1f;
+            
+            OnWaveBegin?.Invoke();
+        }
+        else
+        {
+            OnEveryTenSeconds?.Invoke();
+        }
     }
-    
 }
 
 [Serializable]
