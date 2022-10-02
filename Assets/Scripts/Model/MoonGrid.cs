@@ -47,7 +47,7 @@ public class MoonGrid : MonoBehaviour
 
     public Vector2Int XY(Vector3 vector)
     {
-        return new Vector2Int((int)(vector.x), (int)(vector.y));        
+        return new Vector2Int(Mathf.FloorToInt(vector.x), Mathf.FloorToInt(vector.y));        
     }
 
     public Vector2Int XY(GameObject go)
