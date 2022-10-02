@@ -92,7 +92,7 @@ public class StarscapeMesh : MonoBehaviour
         var start = new Vector3(x * (unitSize + distance), y * (unitSize + distance), z * (unitSize + distance))
             - new Vector3((unitSize + distance) * xSize * 0.5f, (unitSize + distance) * ySize * 0.5f, (unitSize + distance) * zSize * 0.5f)
             + Random.onUnitSphere * Random.Range(-randomDistanceShift, randomDistanceShift);
-        var mySize = randomSizeShift != 0 ? unitSize * Random.Range(-randomSizeShift, randomSizeShift): unitSize;
+        var mySize = randomSizeShift != 0 ? unitSize * Random.Range(-randomSizeShift, randomSizeShift) : unitSize;
         vertices[i] = new Vector3(start.x, start.y, start.z);
         vertices[i + 1] = new Vector3(start.x, start.y + mySize, start.z);
         vertices[i + 2] = new Vector3(start.x + mySize, start.y + mySize, start.z);

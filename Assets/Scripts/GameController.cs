@@ -22,15 +22,17 @@ public class GameController : MonoBehaviour
     private float _timer;
 
     public event Action OnEveryTenSeconds;
-    
+
     public PlayerStats Stats { get; private set; }
 
     private List<UnloadingStation> _stations;
-    
+
+    public GameObject BuildCursor;
+
     private void Awake()
     {
         _stations = FindObjectsOfType<UnloadingStation>().ToList();
-        
+
         Stats = new PlayerStats();
 
         Instance = this;
@@ -75,80 +77,82 @@ public class GameController : MonoBehaviour
         if (Physics.Raycast(ray, out hit, 100f, LayerMask.GetMask("Cell")))
         {
             mouseWorldPosition = hit.transform.position;
+
         }
 
         var leftMouseDown = Input.GetMouseButton(0);
-        
+
         Vector2Int xy = MoonGrid.Instance.XY(mouseWorldPosition);
+        BuildCursor.transform.position = new Vector3(xy.x, xy.y, 0);
         foreach (var tile in MoonGrid.Instance.Cells)
         {
             tile.Highlighted = MoonGrid.Instance.XY(tile) == xy;
         }
-        
+
         switch (Mode)
         {
             case GameMode.Build:
-            {
-
-                var thisCell = MoonGrid.Instance.GetCell(xy);
-                if (!_leftMouseWasDown && leftMouseDown)
                 {
-                    //just pressed. remember what we are doing
-                    if (MoonGrid.Instance.CanBuildOn(xy))
+
+                    var thisCell = MoonGrid.Instance.GetCell(xy);
+                    if (!_leftMouseWasDown && leftMouseDown)
                     {
-                        if (thisCell.HasRoad)
+                        //just pressed. remember what we are doing
+                        if (MoonGrid.Instance.CanBuildOn(xy))
                         {
-                            _dragTo = DragTo.Clear;
+                            if (thisCell.HasRoad)
+                            {
+                                _dragTo = DragTo.Clear;
+                            }
+                            else
+                            {
+                                _dragTo = DragTo.Build;
+                            }
                         }
                         else
                         {
-                            _dragTo = DragTo.Build;
+                            _dragTo = DragTo.Nothing;
                         }
                     }
-                    else
+
+                    if (leftMouseDown && MoonGrid.Instance.CanBuildOn(xy))
                     {
+                        //we are dragging
+                        if (_dragTo == DragTo.Build && !thisCell.HasRoad)
+                        {
+                            BuildRoad(thisCell);
+                        }
+
+                        if (_dragTo == DragTo.Clear && thisCell.HasRoad)
+                        {
+                            RemoveRoad(thisCell);
+                        }
+                    }
+
+                    if (!leftMouseDown && _leftMouseWasDown)
+                    {
+                        //we are up
                         _dragTo = DragTo.Nothing;
                     }
+
+
+                    break;
                 }
-
-                if (leftMouseDown && MoonGrid.Instance.CanBuildOn(xy))
-                {
-                    //we are dragging
-                    if (_dragTo == DragTo.Build && !thisCell.HasRoad)
-                    {
-                        BuildRoad(thisCell);
-                    }
-
-                    if (_dragTo == DragTo.Clear && thisCell.HasRoad)
-                    {
-                        RemoveRoad(thisCell);
-                    }
-                }
-
-                if (!leftMouseDown && _leftMouseWasDown)
-                {
-                    //we are up
-                    _dragTo = DragTo.Nothing;
-                }
-
-
-                break;
-            }
             case GameMode.Sort:
-            {
-                var thisCell = MoonGrid.Instance.GetCell(xy);
-                if (thisCell != null && thisCell.HasRoad)
                 {
-                    if (!_leftMouseWasDown && leftMouseDown)
+                    var thisCell = MoonGrid.Instance.GetCell(xy);
+                    if (thisCell != null && thisCell.HasRoad)
                     {
-                        thisCell.Road.ToggleIfCan();
+                        if (!_leftMouseWasDown && leftMouseDown)
+                        {
+                            thisCell.Road.ToggleIfCan();
+                        }
                     }
+
+
+                    UpdateSort();
+                    break;
                 }
-
-
-                UpdateSort();
-                break;
-            }
         }
 
         _leftMouseWasDown = leftMouseDown;
@@ -164,7 +168,7 @@ public class GameController : MonoBehaviour
 
             SpawnStation();
             SpawnTrain();
-            
+
             OnEveryTenSeconds?.Invoke();
         }
     }
@@ -195,7 +199,7 @@ public class GameController : MonoBehaviour
             // Dev ability to restart the game
 
             Mode = GameMode.Build;
-
+            BuildCursor.SetActive(true);
             var wagons = FindObjectsOfType<Wagon>();
 
             for (var i = wagons.Length - 1; i >= 0; i--)
@@ -207,6 +211,7 @@ public class GameController : MonoBehaviour
         }
         else
         {
+            BuildCursor.SetActive(false);
             Mode = GameMode.Sort;
             _timer = SpawnTime * 0.1f;
         }
@@ -226,11 +231,11 @@ public class GameController : MonoBehaviour
 
                 newStation.transform.position = cell.transform.position;
                 cell.Busy = false; // busy makes impossible to place roads.
-                
+
                 // todo: but we still need to lock cells that are locked on a spawned station
-                
+
                 cell.Element = newStation;
-                
+
                 _stations.Add(newStation);
             }
         }
@@ -245,12 +250,12 @@ public class GameController : MonoBehaviour
 
         var wave = LevelScenario.Instance.Wave;
         var length = Random.Range(wave.TrainsLengthMin, wave.TrainsLengthMax);
-        
+
         var types = _stations.Select(s => s.WagonType).ToList();
 
         if (_stations.Count == 0)
         {
-            types = new List<WagonType>(){WagonType.Green, WagonType.Red, WagonType.Blue};
+            types = new List<WagonType>() { WagonType.Green, WagonType.Red, WagonType.Blue };
             Debug.LogWarning("NO STATIONS, WAVE IS UNBEATABLE");
         }
 
@@ -259,7 +264,7 @@ public class GameController : MonoBehaviour
         {
             wTypes.Add(types.PickRandom());
         }
-        
+
         foreach (var wType in wTypes)
         {
             newTrain.AddNewWagon(wType);
