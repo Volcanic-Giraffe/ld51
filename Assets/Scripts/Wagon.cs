@@ -1,9 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using DG.Tweening;
 using UnityEngine;
 
+[ExecuteAlways]
 public class Wagon : MonoBehaviour
 {
     public WagonType WagonType;
@@ -39,6 +41,13 @@ public class Wagon : MonoBehaviour
         _currentSpeed = Speed;
         
         _rigidBody = GetComponent<Rigidbody>();
+
+        _wagonItself = GetComponentsInChildren<MeshRenderer>().First(it => it.GetComponent<Wheel>() == null);
+    }
+
+    private void OnEnable()
+    {
+        Awake();
     }
 
     private void Start()
@@ -63,10 +72,20 @@ public class Wagon : MonoBehaviour
 
             _currentSpeed += delta;
         }
+
+        if (_wagonItself != null)
+        {
+            _wagonItself.transform.localPosition = new Vector3(
+                0,
+                MathF.Cos( GetInstanceID() + Time.time*9.1112f)*0.02f, 
+                MathF.Sin(GetInstanceID() - Time.time*4.017444f)*0.02f
+                );
+        }
     }
 
     private RoadTile _previousRoad = null;
     private Vector2Int _fromPrevious;
+    private MeshRenderer _wagonItself;
 
     private void FixedUpdate()
     {
@@ -115,9 +134,14 @@ public class Wagon : MonoBehaviour
             RemoveFromTrain(RemoveReason.OffTrack);
             Debug.Log("Strange.....");
             Stop();
+            return;
         }
 
-        var targetCell = MoonGrid.Instance.CenterOfTile(myXY + Direction);
+        
+        var targetCell = (myCell != null && myCell.HasRoad) 
+            ? myCell.Road.GetNextPoint(transform.position, _fromPrevious, Direction)
+            : MoonGrid.Instance.CenterOfTile(myXY + Direction);
+
         var newLoc = transform.position + (targetCell - transform.position).normalized * (_trainHead._currentSpeed * Time.fixedDeltaTime);
         newLoc.z = 0;
         _rigidBody.MovePosition(newLoc);
