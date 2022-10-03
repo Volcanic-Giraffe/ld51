@@ -51,13 +51,14 @@ public class LevelScenario : MonoBehaviour
     {
         if (current <= 0)
         {
-            GameOverUI.Instance.Show();
+            GameController.Instance.FailGame();
         }
     }
     
     private void Update()
     {
-        if (GameController.Instance.Mode == GameController.GameMode.Build) return;
+        if (GameController.GameOver) return;
+        if (GameController.Instance != null && GameController.Instance.Mode == GameController.GameMode.Build) return;
 
         if (TrainsLeft == 0)
         {

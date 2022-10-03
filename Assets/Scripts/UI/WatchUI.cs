@@ -22,8 +22,9 @@ public class WatchUI : MonoBehaviour
     }
 
     private void Update()
-    
     {
+        if (GameController.GameOver) return;
+        
         if (!_paused)
         {
             var before = arrowRect.localRotation.eulerAngles.z;

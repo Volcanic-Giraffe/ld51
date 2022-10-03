@@ -26,6 +26,10 @@ public class GameController : MonoBehaviour
     public GameObject BuildCursor;
 
     public event Action OnModeChanged;
+
+    private bool _gameOver;
+
+    public static bool GameOver => Instance != null && Instance._gameOver;
     
     private void Awake()
     {
@@ -72,6 +76,8 @@ public class GameController : MonoBehaviour
 
     private void Update()
     {
+        if (GameOver) return;
+        
         Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
         Vector3 mouseWorldPosition = new Vector3(-5, -5, 0);
@@ -341,6 +347,14 @@ public class GameController : MonoBehaviour
         cell.Road = newRoad;
     }
 
+    public void FailGame()
+    {
+        if (GameOver) return;
+        
+        _gameOver = true;
+        GameOverUI.Instance.Show();
+    }
+    
     public void RestartGame()
     {
         DOTween.KillAll();

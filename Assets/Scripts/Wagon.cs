@@ -60,6 +60,8 @@ public class Wagon : MonoBehaviour
 
     private void Update()
     {
+        if (GameController.GameOver) return;
+        
         if (FrontWagon == null && WagonType != WagonType.Locomotive)
         {
             RemoveFromTrain(RemoveReason.LostLocomotive);
@@ -92,7 +94,8 @@ public class Wagon : MonoBehaviour
 
     private void FixedUpdate()
     {
-        
+        if (GameController.GameOver) return;
+
         var myXY = MoonGrid.Instance.XY(this);
         var myCell = MoonGrid.Instance.GetCell(myXY);
 

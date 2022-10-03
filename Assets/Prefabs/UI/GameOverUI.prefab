@@ -340,6 +340,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94b5538bb42f5da4ebe4210fff532a49, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  overlay: {fileID: 6308325465901920071}
   container: {fileID: 1509109027469085634}
   gameOverRect: {fileID: 6260052859335421615}
   tryAgainRect: {fileID: 3735441880502812921}

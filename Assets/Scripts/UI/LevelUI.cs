@@ -103,9 +103,9 @@ public class LevelUI : MonoBehaviour
 
         SetWave();
     }
-    
-    private void Update()
+
+    public void DevFailLevel()
     {
-        
+        GameController.Instance.FailGame();
     }
 }
