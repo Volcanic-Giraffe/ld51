@@ -94,7 +94,9 @@ public class LevelUI : MonoBehaviour
     
     public void OnBuildClicked()
     {
-        GameController.Instance.OnBuild();
+        // GameController.Instance.OnBuild();
+        
+        LevelScenario.Instance.RestartWave();
     }
 
     public void OnSkipClicked()

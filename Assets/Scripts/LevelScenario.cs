@@ -99,6 +99,14 @@ public class LevelScenario : MonoBehaviour
         }
     }
 
+    public void RestartWave()
+    {
+        Wave = waves[Math.Min(WaveIndex, waves.Count - 1)];
+        TrainNumber = 0;
+
+        OnWaveBegin?.Invoke();
+    }
+    
     public void AddWagon(Wagon wagon)
     {
         _wagons.Add(wagon);
