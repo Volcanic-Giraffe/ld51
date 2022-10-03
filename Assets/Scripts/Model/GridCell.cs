@@ -9,11 +9,16 @@ public class GridCell : MonoBehaviour
 {
     public bool Highlighted;
     public bool Busy;
+    public bool Station;
 
     public bool HasRoad => Road != null;
     public bool Locked { get; private set; }
 
     public RoadTile Road = null;
+
+    public bool CanPlaceStation => !Locked && !Station && !Busy;
+    public int X { get; set; }
+    public int Y { get; set; }
 
     public IGridElement Element;
     private void OnTriggerEnter(Collider other)

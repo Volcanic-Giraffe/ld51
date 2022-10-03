@@ -35,6 +35,8 @@ public class MoonGrid : MonoBehaviour
             {
                 var tile = Instantiate(GridCellPrefab, transform);
                 tile.transform.localPosition = new Vector3(x + 0.5f, y + 0.5f, 0);
+                tile.X = x;
+                tile.Y = y;
 
                 if (x < LockedWidthLeft || x >= Width - LockedWidthRight)
                 {
@@ -89,6 +91,21 @@ public class MoonGrid : MonoBehaviour
         return _cells[xy.x, xy.y];
     }
 
+    [CanBeNull]
+    public GridCell GetCell(int x, int y)
+    {
+        if (x < 0 || y < 0) return null;
+        if (x >= Width || y >= Height) return null;
+        return _cells[x, y];
+    }
+    
+    public bool HasCell(int x, int y)
+    {
+        if (x < 0 || y < 0) return false;
+        if (x >= Width || y >= Height) return false;
+        return true;
+    }
+    
     public bool CanBuildOn(Vector2Int xy)
     {
         //skip eves
@@ -102,15 +119,29 @@ public class MoonGrid : MonoBehaviour
         return !tile.Busy;
     }
 
-    public GridCell RandomFreeCell(int borderOffset = 0)
+    public GridCell RandomFreeCell(int borderOffset = 0, int inflateRadius = 0)
     {
         var list = new List<GridCell>();
-
         for (int x = borderOffset; x < Width - borderOffset; x++)
         {
             for (int y = borderOffset; y < Height - borderOffset; y++)
             {
-                if (!_cells[x, y].Busy && !_cells[x,y].Locked) list.Add(_cells[x, y]);
+                var obstacle = false;
+                for (int rx = -inflateRadius; rx <= inflateRadius; rx++)
+                {
+                    for (int ry = -inflateRadius; ry <= inflateRadius; ry++)
+                    {
+                        if (!HasCell(x + rx, y + ry) || !_cells[x + rx, y + ry].CanPlaceStation)
+                        {
+                            obstacle = true;
+                        }
+                    }
+                }
+
+                if (!obstacle && HasCell(x, y) && _cells[x, y].CanPlaceStation)
+                {
+                    list.Add(_cells[x, y]);
+                }
             }
         }
 
@@ -142,6 +173,10 @@ public class MoonGrid : MonoBehaviour
                 {
                     Gizmos.color = Color.yellow.WithAlpha(0.05f);
                 }
+                if (tile != null && !tile.CanPlaceStation)
+                {
+                    Gizmos.color = Color.magenta.WithAlpha(0.5f);
+                }
 
                 if (tile != null && tile.Highlighted)
                 {
@@ -156,6 +191,7 @@ public class MoonGrid : MonoBehaviour
                         Gizmos.color = Color.red.WithAlpha(0.8f); ;
                     }
                 }
+
 
                 Gizmos.DrawCube(CenterOfTile(new Vector2Int(x, y)), new Vector3(1, 1, 0.1f));
 

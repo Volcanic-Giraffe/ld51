@@ -230,12 +230,34 @@ public class GameController : MonoBehaviour
             {
                 var newStation = Instantiate(StationPrefabs[i % StationPrefabs.Count]);
 
-                var cell = MoonGrid.Instance.RandomFreeCell(2);
+                var cell = MoonGrid.Instance.RandomFreeCell(2, 1);
 
                 newStation.transform.position = cell.transform.position;
                 cell.Busy = false; // busy makes impossible to place roads.
+                cell.Station = true;
 
-                // todo: but we still need to lock cells that are locked on a spawned station
+                var pattern = UnloadingStation.Patterns[newStation.WagonType];
+                
+                for (int x = 0; x < 3; x++)
+                {
+                    for (int y = 0; y < 3; y++)
+                    {
+                        var dx = x - 1;
+                        var dy = y - 1;
+
+                        var neih = MoonGrid.Instance.GetCell(cell.X + dx, cell.Y + dy);
+
+                        if (neih != null)
+                        {
+                            neih.Station = true;
+                            
+                            if (pattern[x, y] == 1)
+                            {
+                                neih.Busy = true;
+                            }
+                        }
+                    }
+                }
 
                 cell.Element = newStation;
 
