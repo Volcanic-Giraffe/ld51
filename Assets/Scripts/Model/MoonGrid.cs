@@ -119,12 +119,12 @@ public class MoonGrid : MonoBehaviour
         return !tile.Busy;
     }
 
-    public GridCell RandomFreeCell(int borderOffset = 0, int inflateRadius = 0)
+    public GridCell RandomFreeCell(int borderX = 0, int borderY = 0, int inflateRadius = 0)
     {
         var list = new List<GridCell>();
-        for (int x = borderOffset; x < Width - borderOffset; x++)
+        for (int x = borderX; x < Width - borderX; x++)
         {
-            for (int y = borderOffset; y < Height - borderOffset; y++)
+            for (int y = borderY; y < Height - borderY; y++)
             {
                 var obstacle = false;
                 for (int rx = -inflateRadius; rx <= inflateRadius; rx++)
