@@ -17,12 +17,16 @@ public class ExitTrigger : MonoBehaviour
                 wagon.ExitGrid(RemoveReason.ExitGood);
                 
                 GameController.Instance.Stats.AddScore(Const.ScoreSoloLocomotiveExit);
+
+                GameController.Instance.ShowFlyingScore(transform.position, Const.ScoreSoloLocomotiveExit);
             }
             else
             {
                 // once locomotive destroyed - the rest of the train will be destroyed with LostLocomotive reason
                 wagon.ExitGrid(RemoveReason.ExitBad);
                 GameController.Instance.Stats.AddScore(Const.ScorePerWagonExit);
+                
+                GameController.Instance.ShowFlyingScore(transform.position, Const.ScorePerWagonExit);
             }
         }
     }

@@ -55,6 +55,8 @@ public class UnloadingStation : MonoBehaviour, IGridElement
                 wagon.RemoveFromTrain(RemoveReason.Station);
                 
                 GameController.Instance.Stats.AddScore(Const.ScorePerWagonUnloaded);
+                
+                GameController.Instance.ShowFlyingScore(transform.position, Const.ScorePerWagonUnloaded);
             }
         }
     }

@@ -20,6 +20,8 @@ public class GameController : MonoBehaviour
 
     public List<UnloadingStation> StationPrefabs;
 
+    public FlyingText FlyingTextPrefab;
+    
     public PlayerStats Stats { get; private set; }
 
     private List<UnloadingStation> _stations;
@@ -458,5 +460,13 @@ public class GameController : MonoBehaviour
     public void SetPaused(bool paused)
     {
         _paused = paused;
+    }
+
+    public void ShowFlyingScore(Vector3 position, int score)
+    {
+        var flyingText = Instantiate(FlyingTextPrefab, position + Vector3.back * 2f, Quaternion.identity);
+
+        // flyingText.transform.LookAt(_camera.transform);
+        flyingText.Show(score);
     }
 }
