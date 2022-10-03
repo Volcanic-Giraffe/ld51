@@ -11,6 +11,7 @@ public class GridCell : MonoBehaviour
     public bool Busy;
 
     public bool HasRoad => Road != null;
+    public bool Locked { get; private set; }
 
     public RoadTile Road = null;
 
@@ -42,5 +43,13 @@ public class GridCell : MonoBehaviour
         {
             Road.transform.position = transform.position;
         }
+    }
+
+    public void SetLocked(bool locked)
+    {
+        Locked = locked;
+
+        // change layer to exclude it from mouse raycast
+        gameObject.layer = locked ? LayerMask.NameToLayer("CellLocked") : LayerMask.NameToLayer("Cell");
     }
 }

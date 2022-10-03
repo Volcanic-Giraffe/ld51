@@ -13,6 +13,8 @@ public class MoonGrid : MonoBehaviour
     public static MoonGrid Instance;
 
     public int Width;
+    public int FakeWidthToRight;
+    
     public int Height;
 
     public GridCell GridCellPrefab;
@@ -23,13 +25,19 @@ public class MoonGrid : MonoBehaviour
         Instance = this;
         _camera = Camera.main;
 
-        _cells = new GridCell[Width, Height];
-        for (int x = 0; x < Width; x++)
+        _cells = new GridCell[Width + FakeWidthToRight, Height];
+        for (int x = 0; x < Width + FakeWidthToRight; x++)
         {
             for (int y = 0; y < Height; y++)
             {
                 var tile = Instantiate(GridCellPrefab, transform);
                 tile.transform.localPosition = new Vector3(x + 0.5f, y + 0.5f, 0);
+
+                if (x >= Width)
+                {
+                    tile.SetLocked(true);
+                }
+                
                 _cells[x, y] = tile;
             }
         }
@@ -74,7 +82,7 @@ public class MoonGrid : MonoBehaviour
     public GridCell GetCell(Vector2Int xy)
     {
         if (xy.x < 0 || xy.y < 0) return null;
-        if (xy.x >= Width || xy.y >= Height) return null;
+        if (xy.x >= Width + FakeWidthToRight || xy.y >= Height) return null;
         return _cells[xy.x, xy.y];
     }
 
@@ -87,7 +95,7 @@ public class MoonGrid : MonoBehaviour
         //for editor
         if (_cells == null) return true;
         var tile = GetCell(xy);
-        if (tile == null) return false;
+        if (tile == null || tile.Locked) return false;
         return !tile.Busy;
     }
 

@@ -179,6 +179,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Width: 22
+  FakeWidthToRight: 10
   Height: 14
   GridCellPrefab: {fileID: 5865580056066922723, guid: b1cf342b20752bc4e9446e8ab438599c,
     type: 3}
@@ -195,7 +196,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1395ddf24f844fdba32d89d9b525a46, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SpawnTime: 10
   Mode: 0
   RoadTilePrefabs:
   - {fileID: 6354120432888080250, guid: 52b78797d707be24ab820584884e3006, type: 3}
@@ -222,6 +222,7 @@ MonoBehaviour:
   - {fileID: 6282013604703492871, guid: 8d4656a8c28c98044a2f22685020fdf9, type: 3}
   - {fileID: 2825137523697492498, guid: a9fec7b1bac6e014598db621db849a02, type: 3}
   - {fileID: 1289958936872024237, guid: 65aa4b22d2e9cd04680b6e03b6bb1823, type: 3}
+  BuildCursor: {fileID: 0}
 --- !u!1001 &4521377266438459427
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -312,7 +313,7 @@ PrefabInstance:
     - target: {fileID: 9051221175821041212, guid: fae0235f852595145a3289da213db27b,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 21.5
+      value: 22.5
       objectReference: {fileID: 0}
     - target: {fileID: 9051221175821041212, guid: fae0235f852595145a3289da213db27b,
         type: 3}

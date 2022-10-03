@@ -93,6 +93,8 @@ public class GameController : MonoBehaviour
         BuildCursor.transform.position = new Vector3(xy.x, xy.y, 0);
         foreach (var tile in MoonGrid.Instance.Cells)
         {
+            if (tile.Locked) continue;
+
             tile.Highlighted = MoonGrid.Instance.XY(tile) == xy;
         }
 
