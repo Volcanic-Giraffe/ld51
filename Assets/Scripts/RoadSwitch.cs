@@ -30,7 +30,7 @@ public class RoadSwitch : MonoBehaviour
         var isOnTop = Physics.Raycast(transform.position, Vector3.back, 1f, LayerMask.GetMask("Wagon"), QueryTriggerInteraction.Collide);
         if (isOnTop)
         {
-            _enableTimeRemaining = 1f;
+            _enableTimeRemaining = 0.3f;
         }
     }
 
