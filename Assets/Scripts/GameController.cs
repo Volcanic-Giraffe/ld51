@@ -64,6 +64,7 @@ public class GameController : MonoBehaviour
     }
 
     private bool _leftMouseWasDown = false;
+    private bool _rightMouseWasDown = false;
 
     enum DragTo
     {
@@ -88,6 +89,7 @@ public class GameController : MonoBehaviour
         }
 
         var leftMouseDown = Input.GetMouseButton(0);
+        var rightMouseDown = Input.GetMouseButton(1);
 
         Vector2Int xy = MoonGrid.Instance.XY(mouseWorldPosition);
         BuildCursor.transform.position = new Vector3(xy.x, xy.y, 0);
@@ -102,48 +104,8 @@ public class GameController : MonoBehaviour
         {
             case GameMode.Build:
                 {
-
-                    var thisCell = MoonGrid.Instance.GetCell(xy);
-                    if (!_leftMouseWasDown && leftMouseDown)
-                    {
-                        //just pressed. remember what we are doing
-                        if (MoonGrid.Instance.CanBuildOn(xy))
-                        {
-                            if (thisCell.HasRoad)
-                            {
-                                _dragTo = DragTo.Clear;
-                            }
-                            else
-                            {
-                                _dragTo = DragTo.Build;
-                            }
-                        }
-                        else
-                        {
-                            _dragTo = DragTo.Nothing;
-                        }
-                    }
-
-                    if (leftMouseDown && MoonGrid.Instance.CanBuildOn(xy))
-                    {
-                        //we are dragging
-                        if (_dragTo == DragTo.Build && !thisCell.HasRoad)
-                        {
-                            BuildRoad(thisCell);
-                        }
-
-                        if (_dragTo == DragTo.Clear && thisCell.HasRoad)
-                        {
-                            RemoveRoad(thisCell);
-                        }
-                    }
-
-                    if (!leftMouseDown && _leftMouseWasDown)
-                    {
-                        //we are up
-                        _dragTo = DragTo.Nothing;
-                    }
-
+                    // BuildStyleA(xy, leftMouseDown,rightMouseDown); // - old
+                    BuildStyleB(xy, leftMouseDown,rightMouseDown); // - new
 
                     break;
                 }
@@ -163,8 +125,76 @@ public class GameController : MonoBehaviour
         }
 
         _leftMouseWasDown = leftMouseDown;
+        _rightMouseWasDown = rightMouseDown;
     }
 
+    // Original. LMB mostly
+    private void BuildStyleA(Vector2Int xy, bool lmb, bool rmb)
+    {
+        var thisCell = MoonGrid.Instance.GetCell(xy);
+        if (!_leftMouseWasDown && lmb)
+        {
+            //just pressed. remember what we are doing
+            if (MoonGrid.Instance.CanBuildOn(xy))
+            {
+                if (thisCell.HasRoad)
+                {
+                    _dragTo = DragTo.Clear;
+                }
+                else
+                {
+                    _dragTo = DragTo.Build;
+                }
+            }
+            else
+            {
+                _dragTo = DragTo.Nothing;
+            }
+        }
+
+        if (lmb && MoonGrid.Instance.CanBuildOn(xy))
+        {
+            //we are dragging
+            if (_dragTo == DragTo.Build && !thisCell.HasRoad)
+            {
+                BuildRoad(thisCell);
+            }
+
+            if (_dragTo == DragTo.Clear && thisCell.HasRoad)
+            {
+                RemoveRoad(thisCell);
+            }
+        }
+
+        if (!lmb && _leftMouseWasDown)
+        {
+            //we are up
+            _dragTo = DragTo.Nothing;
+        }
+    }
+    
+    // New. LMB and RMB
+    private void BuildStyleB(Vector2Int xy, bool lmb, bool rmb)
+    {
+        var thisCell = MoonGrid.Instance.GetCell(xy);
+
+        if (lmb && MoonGrid.Instance.CanBuildOn(xy))
+        {
+            if (!thisCell.HasRoad)
+            {
+                BuildRoad(thisCell);
+            }
+        }
+
+        if (rmb)
+        {
+            if (thisCell.HasRoad)
+            {
+                RemoveRoad(thisCell);
+            }
+        }
+    }
+    
     public void PrepareForWave()
     {
         SpawnStation();
