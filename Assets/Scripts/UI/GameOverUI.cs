@@ -22,6 +22,8 @@ public class GameOverUI : MonoBehaviour
     private Vector2 _gameOverPos;
     private Vector2 _tryAgainPos;
 
+    private bool _shown;
+    
     private void Awake()
     {
         Instance = this;
@@ -34,6 +36,7 @@ public class GameOverUI : MonoBehaviour
 
     public void Show()
     {
+        _shown = true;
         container.gameObject.SetActive(true);
 
         scoreText.SetText("0");
@@ -41,6 +44,14 @@ public class GameOverUI : MonoBehaviour
         tryAgainRect.gameObject.SetActive(false);
 
         StartCoroutine(AnimateIn());
+    }
+
+    private void Update()
+    {
+        if (_shown && Input.GetKeyDown(KeyCode.R))
+        {
+            OnTryAgainClicked();
+        }
     }
 
     private IEnumerator AnimateIn()
@@ -72,6 +83,7 @@ public class GameOverUI : MonoBehaviour
 
     public void Hide()
     {
+        _shown = false;
         container.gameObject.SetActive(false);
     }
 
