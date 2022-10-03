@@ -203,6 +203,8 @@ public class GameController : MonoBehaviour
 
     void RemoveRoad(GridCell cell)
     {
+        if (cell == null || cell.Road == null) return;
+        
         var road = cell.Road;
         Destroy(road.gameObject);
         cell.Road = null;
@@ -254,6 +256,8 @@ public class GameController : MonoBehaviour
                             if (pattern[x, y] == 1)
                             {
                                 neih.Busy = true;
+                                
+                                RemoveRoad(neih);
                             }
                         }
                     }
