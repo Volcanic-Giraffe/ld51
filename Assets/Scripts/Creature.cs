@@ -51,7 +51,7 @@ public class Creature : MonoBehaviour
                 
                 child.localPosition = childPos + new Vector3(0, 0,
                     i < 0.1f ? Mathf.Lerp(0, 0.5f, i / 0.1f) :
-                    (i < 0.4f) ? Mathf.Lerp(0.5f, -6, (i-0.1f) / 0.3f) : Mathf.Lerp(-6, 0, (i - 0.4f) / 0.6f));
+                    (i < 0.4f) ? Mathf.Lerp(0.5f, -2, (i-0.1f) / 0.3f) : Mathf.Lerp(-2, 0, (i - 0.4f) / 0.6f));
                 child.localScale = new Vector3(1, 1, 
                     (i < 0.1f ? Mathf.Lerp(1, 0.5f, i/0.1f) : (i < 0.4f ? Mathf.Lerp(0.5f, 1.5f, (i-0.1f)/0.3f) : (Mathf.Lerp(1.5f, 1, (i-0.4f)/0.6f)))));
                 yield return new WaitForEndOfFrame();
