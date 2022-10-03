@@ -195,7 +195,7 @@ public class GameController : MonoBehaviour
 
         if (rmb)
         {
-            if (thisCell.HasRoad)
+            if (thisCell != null && thisCell.HasRoad)
             {
                 RemoveRoad(thisCell);
             }
