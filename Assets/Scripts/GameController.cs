@@ -184,6 +184,13 @@ public class GameController : MonoBehaviour
             {
                 BuildRoad(thisCell);
             }
+            else
+            {
+                if (!_leftMouseWasDown)
+                {
+                    thisCell.Road.ToggleIfCan();
+                }
+            }
         }
 
         if (rmb)
