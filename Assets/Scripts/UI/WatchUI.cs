@@ -23,7 +23,7 @@ public class WatchUI : MonoBehaviour
 
     private void Update()
     {
-        if (GameController.GameOver) return;
+        if (GameController.GameOver || GameController.Paused) return;
         
         if (!_paused)
         {

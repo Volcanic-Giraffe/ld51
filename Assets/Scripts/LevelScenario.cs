@@ -57,7 +57,7 @@ public class LevelScenario : MonoBehaviour
     
     private void Update()
     {
-        if (GameController.GameOver) return;
+        if (GameController.GameOver || GameController.Paused) return;
         if (GameController.Instance != null && GameController.Instance.Mode == GameController.GameMode.Build) return;
 
         if (TrainsLeft == 0)

@@ -29,11 +29,15 @@ public class GameController : MonoBehaviour
     public event Action OnModeChanged;
 
     private bool _gameOver;
+    private bool _paused;
 
     public static bool GameOver => Instance != null && Instance._gameOver;
+    public static bool Paused => Instance == null || Instance._paused;
 
     private void Awake()
     {
+        _paused = true;
+        
         _stations = FindObjectsOfType<UnloadingStation>().ToList();
 
         Stats = new PlayerStats();
@@ -86,7 +90,7 @@ public class GameController : MonoBehaviour
 
     private void Update()
     {
-        if (GameOver) return;
+        if (GameOver || Paused) return;
 
         Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
@@ -449,5 +453,10 @@ public class GameController : MonoBehaviour
     {
         DOTween.KillAll();
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public void SetPaused(bool paused)
+    {
+        _paused = paused;
     }
 }

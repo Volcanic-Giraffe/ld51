@@ -61,7 +61,7 @@ public class Wagon : MonoBehaviour
 
     private void Update()
     {
-        if (GameController.GameOver) return;
+        if (GameController.GameOver || GameController.Paused) return;
 
         if (FrontWagon == null && WagonType != WagonType.Locomotive)
         {
@@ -95,7 +95,7 @@ public class Wagon : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (GameController.GameOver) return;
+        if (GameController.GameOver || GameController.Paused) return;
 
         var myXY = MoonGrid.Instance.XY(this);
         var myCell = MoonGrid.Instance.GetCell(myXY);
