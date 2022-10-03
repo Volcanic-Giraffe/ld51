@@ -11,19 +11,19 @@ public class UnloadingStation : MonoBehaviour, IGridElement
     public static Dictionary<WagonType, int[,]> Patterns = new()
     {
         [WagonType.Blue] = new[,] {
-            { 1, 0, 0 },
+            { 1, 0, 1 },
             { 0, 0, 0 },
-            { 0, 0, 0 }
+            { 1, 0, 1 }
         },
         [WagonType.Green] = new[,] {
-            { 1, 0, 0 },
+            { 1, 1, 1 },
             { 0, 0, 0 },
-            { 0, 0, 0 }
+            { 0, 1, 0 }
         },
         [WagonType.Red] = new[,] {
             { 1, 0, 0 },
-            { 0, 0, 0 },
-            { 0, 0, 0 }
+            { 0, 0, 1 },
+            { 1, 0, 1 }
         },
     };
 
