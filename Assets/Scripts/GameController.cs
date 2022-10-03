@@ -272,7 +272,7 @@ public class GameController : MonoBehaviour
 
     public void OnRun()
     {
-        BuildCursor.SetActive(false);
+        BuildCursor.SetActive(true);
         SetMode(GameMode.Sort);
         Sounds.Instance.PlayExact("todododun", 0.3f);
         _skipAnnouncer = true;
