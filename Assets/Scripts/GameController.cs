@@ -196,6 +196,8 @@ public class GameController : MonoBehaviour
     void BuildRoad(GridCell cell)
     {
         cell.Road = Instantiate(RoadTilePrefabs[0], transform);
+        cell.Road.transform.position = cell.transform.position;
+        
         RecalculateRoads();
     }
 
