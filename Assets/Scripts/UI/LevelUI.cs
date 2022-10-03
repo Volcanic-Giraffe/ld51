@@ -15,6 +15,11 @@ public class LevelUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI waveText;
     [SerializeField] private TextMeshProUGUI trainsText;
 
+    [Space]
+    [SerializeField] private RectTransform indicatorRun;
+    [SerializeField] private RectTransform indicatorBuild;
+    
+    [Space]
     [SerializeField] private Button buttonRun;
     [SerializeField] private Button buttonBuild;
     
@@ -44,11 +49,17 @@ public class LevelUI : MonoBehaviour
         {
             buttonRun.gameObject.SetActive(true);
             buttonBuild.gameObject.SetActive(false);
+            
+            indicatorRun.gameObject.SetActive(false);
+            indicatorBuild.gameObject.SetActive(true);
         }
         else
         {
             buttonRun.gameObject.SetActive(false);
             buttonBuild.gameObject.SetActive(true);
+            
+            indicatorRun.gameObject.SetActive(true);
+            indicatorBuild.gameObject.SetActive(false);
         }
         
         SetTrains();
