@@ -265,7 +265,7 @@ public class Wagon : MonoBehaviour
         }
         else
         {
-            Sounds.Instance.PlayRandom("boom", 0.1f);
+            Sounds.Instance.PlayRandom("boom", 0.05f);
         }
 
         Instantiate(effect, transform.position, Quaternion.identity);

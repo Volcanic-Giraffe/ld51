@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
@@ -73,7 +74,15 @@ public class GameController : MonoBehaviour
         Build
     }
 
+    private IEnumerator PlayAnnouncer()
+    {
+        Sounds.Instance.PlayRandom("wololo", 0.1f);
+        yield return new WaitForSeconds(1f);
+        Sounds.Instance.PlayRandom("wololo", 0.1f);
+    }
+
     private DragTo _dragTo = DragTo.Nothing;
+    private bool _skipAnnouncer;
 
     private void Update()
     {
@@ -211,6 +220,7 @@ public class GameController : MonoBehaviour
 
     public void PrepareForWave()
     {
+        Sounds.Instance.PlayExact("tododo", 0.3f);
         SpawnStation();
 
         SetMode(GameMode.Build);
@@ -241,7 +251,7 @@ public class GameController : MonoBehaviour
     {
         cell.Road = Instantiate(RoadTilePrefabs[0], transform);
         cell.Road.transform.position = cell.transform.position;
-        Sounds.Instance.PlayRandom("build", 0.2f);
+        Sounds.Instance.PlayRandom("build", 0.3f);
         RecalculateRoads();
     }
 
@@ -252,7 +262,7 @@ public class GameController : MonoBehaviour
         var road = cell.Road;
         Destroy(road.gameObject);
         cell.Road = null;
-        Sounds.Instance.PlayRandom("remove", 0.2f);
+        Sounds.Instance.PlayRandom("remove", 0.3f);
         RecalculateRoads();
     }
 
@@ -260,6 +270,8 @@ public class GameController : MonoBehaviour
     {
         BuildCursor.SetActive(false);
         SetMode(GameMode.Sort);
+        Sounds.Instance.PlayExact("todododun", 0.3f);
+        _skipAnnouncer = true;
     }
 
     public void OnBuild()
@@ -311,14 +323,16 @@ public class GameController : MonoBehaviour
                 cell.Element = newStation;
 
                 _stations.Add(newStation);
-                Sounds.Instance.PlayRandom("warning");
+                Sounds.Instance.PlayRandom("warning", 0.6f);
             }
         }
     }
     private void SpawnTrain()
     {
         if (Mode == GameMode.Build) return;
-        Sounds.Instance.PlayRandom("wololo", 0.05f);
+        if (!_skipAnnouncer)
+            StartCoroutine(PlayAnnouncer());
+        else _skipAnnouncer = false;
         var newTrain = ProduceWagon(WagonType.Locomotive);
         newTrain.transform.position =
             MoonGrid.Instance.CenterOfTile(MoonGrid.Instance.EnterPoint + Vector2Int.left * 3);
