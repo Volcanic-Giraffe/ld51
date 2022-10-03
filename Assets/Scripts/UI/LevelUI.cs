@@ -121,4 +121,9 @@ public class LevelUI : MonoBehaviour
     {
         GameController.Instance.FailGame();
     }
+
+    public void DevTrainSpeed(float mod)
+    {
+        Wagon.GlobalSpeedMod = mod;
+    }
 }

@@ -36,6 +36,8 @@ public class Wagon : MonoBehaviour
     
     private bool _removed;
     private bool _exited;
+
+    public static float GlobalSpeedMod = 1f;
     
     private void Awake()
     {
@@ -155,7 +157,9 @@ public class Wagon : MonoBehaviour
             ? myCell.Road.GetNextPoint(transform.position, _fromPrevious, Direction)
             : MoonGrid.Instance.CenterOfTile(myXY + Direction);
 
-        var newLoc = transform.position + (targetCell - transform.position).normalized * (_trainHead._currentSpeed * Time.fixedDeltaTime);
+        var trainSpeed = _trainHead._currentSpeed * GlobalSpeedMod;
+        
+        var newLoc = transform.position + (targetCell - transform.position).normalized * (trainSpeed * Time.fixedDeltaTime);
         newLoc.z = 0;
         _rigidBody.MovePosition(newLoc);
             
