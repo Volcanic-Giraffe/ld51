@@ -10,21 +10,21 @@ using UnityEngine;
 public class Wagon : MonoBehaviour
 {
     public WagonType WagonType;
-    
+
     public const float LinkLength = 1.5f;
 
     [SerializeField] private Transform Rotator;
 
     public Wagon FrontWagon;
     public Wagon RearWagon;
-    
+
     public float Speed;
     public Vector2Int Direction = Vector2Int.right;
 
     [Space]
     public GameObject RemoveEffectGood;
     public GameObject RemoveEffectBad;
-    
+
     private Rigidbody _rigidBody;
 
     // Basically a locomotive of this train.
@@ -33,17 +33,16 @@ public class Wagon : MonoBehaviour
     private float _baseSpeed;
 
     private float _currentSpeed;
-    
+    private Sounds _sound;
     private bool _removed;
     private bool _exited;
-    
+
     private void Awake()
     {
         _baseSpeed = Speed;
         _currentSpeed = Speed;
-        
+        _sound = GetComponent<Sounds>();
         _rigidBody = GetComponent<Rigidbody>();
-
         _wagonItself = GetComponentsInChildren<MeshRenderer>().First(it => it.GetComponent<Wheel>() == null);
     }
 
@@ -55,14 +54,13 @@ public class Wagon : MonoBehaviour
     private void Start()
     {
         RefreshLinks();
-        
         if (LevelScenario.Instance != null) LevelScenario.Instance.AddWagon(this);
     }
 
     private void Update()
     {
         if (GameController.GameOver) return;
-        
+
         if (FrontWagon == null && WagonType != WagonType.Locomotive)
         {
             RemoveFromTrain(RemoveReason.LostLocomotive);
@@ -83,8 +81,8 @@ public class Wagon : MonoBehaviour
         {
             _wagonItself.transform.localPosition = new Vector3(
                 0,
-                MathF.Cos( GetInstanceID() + Time.time*9.1112f)*0.02f, 
-                MathF.Sin(GetInstanceID() - Time.time*4.017444f)*0.02f
+                MathF.Cos(GetInstanceID() + Time.time * 9.1112f) * 0.02f,
+                MathF.Sin(GetInstanceID() - Time.time * 4.017444f) * 0.02f
                 );
         }
     }
@@ -112,7 +110,7 @@ public class Wagon : MonoBehaviour
                 _fromPrevious = _previousRoad != null ? MoonGrid.Instance.XY(_previousRoad) - myXY : Vector2Int.left;
                 //my new direction
                 Direction = roadIamAt.Direction(_fromPrevious, this);
-                    //Debug.Log($"prevFrom = {_fromPrevious}, direction={Direction}");
+                //Debug.Log($"prevFrom = {_fromPrevious}, direction={Direction}");
             }
 
             if (IsFirstWagon() && !_exited)
@@ -149,23 +147,23 @@ public class Wagon : MonoBehaviour
             return;
         }
 
-        
-        
-        var targetCell = (myCell != null && myCell.HasRoad) 
+
+
+        var targetCell = (myCell != null && myCell.HasRoad)
             ? myCell.Road.GetNextPoint(transform.position, _fromPrevious, Direction)
             : MoonGrid.Instance.CenterOfTile(myXY + Direction);
 
         var newLoc = transform.position + (targetCell - transform.position).normalized * (_trainHead._currentSpeed * Time.fixedDeltaTime);
         newLoc.z = 0;
         _rigidBody.MovePosition(newLoc);
-            
+
         var dir = targetCell - transform.position;
         float angleS = Vector3.SignedAngle(dir, transform.right, -Vector3.forward);
 
         Rotator.eulerAngles = new Vector3(0, 0, angleS);
     }
 
-    private List<Vector2Int> _checkedPoints = new List<Vector2Int>();  
+    private List<Vector2Int> _checkedPoints = new List<Vector2Int>();
     private int CellsToObstacle(Vector2Int xy, Vector2Int from, int max)
     {
         _checkedPoints.Add(xy);
@@ -177,14 +175,14 @@ public class Wagon : MonoBehaviour
         return 1 + CellsToObstacle(xy + newDirection, -newDirection, max - 1);
 
     }
-    
+
 
     public void AddNewWagon(WagonType type)
     {
         var lastWagon = LastWagon();
 
         var pos = lastWagon.transform.position;
-        
+
         var newWagon = GameController.Instance.ProduceWagon(type);
         newWagon.FrontWagon = lastWagon;
         lastWagon.RearWagon = newWagon;
@@ -205,7 +203,7 @@ public class Wagon : MonoBehaviour
             return this;
         }
     }
-    
+
     public Wagon FirstWagon()
     {
         if (FrontWagon != null)
@@ -243,20 +241,28 @@ public class Wagon : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-        
+
         // >>> re-linking is disabled, only tail carts can be removed for good score.
         // if (RearWagon != null) RearWagon.FrontWagon = FrontWagon;
         // if (FrontWagon != null) FrontWagon.RearWagon = RearWagon;
         // <<<
-        
+
         // null linking helps removing wagons with no locomotive
         if (RearWagon != null) RearWagon.FrontWagon = null;
         if (FrontWagon != null) FrontWagon.RearWagon = null;
-        
+
 
         // todo: move positions on tail wagons
 
         var effect = RemoveReasons.IsGood(reason) ? RemoveEffectGood : RemoveEffectBad;
+        if (RemoveReasons.IsGood(reason))
+        {
+            Sounds.Instance.PlayRandom("unload", 0.4f);
+        }
+        else
+        {
+            Sounds.Instance.PlayRandom("boom", 0.1f);
+        }
 
         Instantiate(effect, transform.position, Quaternion.identity);
 
@@ -264,16 +270,16 @@ public class Wagon : MonoBehaviour
         {
             GameController.Instance.Stats.AddLife(-1);
         }
-        
+
         Destroy(gameObject);
-        
+
     }
 
     public bool IsLastWagon()
     {
         return RearWagon == null;
     }
-    
+
     public bool IsFirstWagon()
     {
         return FrontWagon == null;
@@ -289,7 +295,7 @@ public class Wagon : MonoBehaviour
         if (FrontWagon == wagon) return true;
         return FrontWagon != null && FrontWagon.FrontHas(wagon);
     }
-    
+
     private bool RearHas(Wagon wagon)
     {
         if (RearWagon == wagon) return true;
@@ -310,11 +316,11 @@ public class Wagon : MonoBehaviour
 
         return count;
     }
-    
+
     public void ExitGrid(RemoveReason reason)
     {
         if (_exited) return;
-        
+
         _exited = true;
 
         var colliders = GetComponentsInChildren<Collider>();
@@ -323,20 +329,20 @@ public class Wagon : MonoBehaviour
         {
             cldr.enabled = false;
         }
-        
+
         var effect = RemoveReasons.IsGood(reason) ? RemoveEffectGood : RemoveEffectBad;
 
         Instantiate(effect, transform.position, Quaternion.identity);
-        
+
         Destroy(gameObject, 10f); // unexpected, but just in case
     }
 
-    
+
     private void RefreshLinks()
     {
         _trainHead = FirstWagon();
     }
-    
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Wagon"))
@@ -347,7 +353,7 @@ public class Wagon : MonoBehaviour
             {
                 wagon.RemoveFromTrain(RemoveReason.Collision);
             }
-            
+
             // self collision mostly
             if (wagon != FrontWagon && wagon != RearWagon && WagonType == WagonType.Locomotive)
             {

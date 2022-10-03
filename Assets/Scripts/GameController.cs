@@ -30,7 +30,7 @@ public class GameController : MonoBehaviour
     private bool _gameOver;
 
     public static bool GameOver => Instance != null && Instance._gameOver;
-    
+
     private void Awake()
     {
         _stations = FindObjectsOfType<UnloadingStation>().ToList();
@@ -78,7 +78,7 @@ public class GameController : MonoBehaviour
     private void Update()
     {
         if (GameOver) return;
-        
+
         Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
         Vector3 mouseWorldPosition = new Vector3(-5, -5, 0);
@@ -105,7 +105,7 @@ public class GameController : MonoBehaviour
             case GameMode.Build:
                 {
                     // BuildStyleA(xy, leftMouseDown,rightMouseDown); // - old
-                    BuildStyleB(xy, leftMouseDown,rightMouseDown); // - new
+                    BuildStyleB(xy, leftMouseDown, rightMouseDown); // - new
 
                     break;
                 }
@@ -124,9 +124,9 @@ public class GameController : MonoBehaviour
                     // <<<
 
                     // >>> FULL RAILS PLACEMENT (INCLUDES SWITCHES TOGGLING)
-                    BuildStyleB(xy, leftMouseDown,rightMouseDown);
+                    BuildStyleB(xy, leftMouseDown, rightMouseDown);
                     // <<<
-                    
+
                     break;
                 }
         }
@@ -179,7 +179,7 @@ public class GameController : MonoBehaviour
             _dragTo = DragTo.Nothing;
         }
     }
-    
+
     // New. LMB and RMB
     private void BuildStyleB(Vector2Int xy, bool lmb, bool rmb)
     {
@@ -208,11 +208,11 @@ public class GameController : MonoBehaviour
             }
         }
     }
-    
+
     public void PrepareForWave()
     {
         SpawnStation();
-        
+
         SetMode(GameMode.Build);
         BuildCursor.SetActive(true);
         var wagons = FindObjectsOfType<Wagon>();
@@ -228,7 +228,7 @@ public class GameController : MonoBehaviour
     private void SetMode(GameMode mode)
     {
         Mode = mode;
-        
+
         OnModeChanged?.Invoke();
     }
 
@@ -241,17 +241,18 @@ public class GameController : MonoBehaviour
     {
         cell.Road = Instantiate(RoadTilePrefabs[0], transform);
         cell.Road.transform.position = cell.transform.position;
-        
+        Sounds.Instance.PlayRandom("build", 0.2f);
         RecalculateRoads();
     }
 
     void RemoveRoad(GridCell cell)
     {
         if (cell == null || cell.Road == null) return;
-        
+
         var road = cell.Road;
         Destroy(road.gameObject);
         cell.Road = null;
+        Sounds.Instance.PlayRandom("remove", 0.2f);
         RecalculateRoads();
     }
 
@@ -283,7 +284,7 @@ public class GameController : MonoBehaviour
                 cell.Station = true;
 
                 var pattern = UnloadingStation.Patterns[newStation.WagonType];
-                
+
                 for (int x = 0; x < 3; x++)
                 {
                     for (int y = 0; y < 3; y++)
@@ -296,11 +297,11 @@ public class GameController : MonoBehaviour
                         if (neih != null)
                         {
                             neih.Station = true;
-                            
+
                             if (pattern[x, y] == 1)
                             {
                                 neih.Busy = true;
-                                
+
                                 RemoveRoad(neih);
                             }
                         }
@@ -310,13 +311,14 @@ public class GameController : MonoBehaviour
                 cell.Element = newStation;
 
                 _stations.Add(newStation);
+                Sounds.Instance.PlayRandom("warning");
             }
         }
     }
     private void SpawnTrain()
     {
         if (Mode == GameMode.Build) return;
-
+        Sounds.Instance.PlayRandom("wololo", 0.05f);
         var newTrain = ProduceWagon(WagonType.Locomotive);
         newTrain.transform.position =
             MoonGrid.Instance.CenterOfTile(MoonGrid.Instance.EnterPoint + Vector2Int.left * 3);
@@ -424,11 +426,11 @@ public class GameController : MonoBehaviour
     public void FailGame()
     {
         if (GameOver) return;
-        
+
         _gameOver = true;
         GameOverUI.Instance.Show();
     }
-    
+
     public void RestartGame()
     {
         DOTween.KillAll();
