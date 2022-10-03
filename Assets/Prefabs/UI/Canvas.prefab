@@ -478,8 +478,9 @@ GameObject:
   - component: {fileID: 9098913961401388043}
   - component: {fileID: 9121780902241681888}
   - component: {fileID: 7866563474592673847}
+  - component: {fileID: 3956071599265728741}
   m_Layer: 5
-  m_Name: DevSpeed2
+  m_Name: Speed2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -533,7 +534,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 0b8e08a875417224bb330d49828b907e, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 69c96b833c5ca6847bc72063efcbd0b7, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -588,18 +589,35 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 4004484315094297824}
-        m_TargetAssemblyTypeName: LevelUI, Assembly-CSharp
-        m_MethodName: DevTrainSpeed
-        m_Mode: 4
+      - m_Target: {fileID: 3956071599265728741}
+        m_TargetAssemblyTypeName: SpeedButton, Assembly-CSharp
+        m_MethodName: OnClicked
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
-          m_FloatArgument: 1
+          m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &3956071599265728741
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2139220287677652404}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a0a3cd47ecaaa140a7511ab5eea8667, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hotkey: 50
+  button: {fileID: 7866563474592673847}
+  SpeedMod: 1
+  imgDefault: {fileID: 21300000, guid: 0b8e08a875417224bb330d49828b907e, type: 3}
+  imgSelected: {fileID: 21300000, guid: 69c96b833c5ca6847bc72063efcbd0b7, type: 3}
 --- !u!1 &2310319971366207753
 GameObject:
   m_ObjectHideFlags: 0
@@ -756,8 +774,9 @@ GameObject:
   - component: {fileID: 1809393977290042277}
   - component: {fileID: 6497536587864213328}
   - component: {fileID: 1276407200784278406}
+  - component: {fileID: 5782889464265417887}
   m_Layer: 5
-  m_Name: DevSpeed1
+  m_Name: Speed1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -866,18 +885,35 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 4004484315094297824}
-        m_TargetAssemblyTypeName: LevelUI, Assembly-CSharp
-        m_MethodName: DevTrainSpeed
-        m_Mode: 4
+      - m_Target: {fileID: 5782889464265417887}
+        m_TargetAssemblyTypeName: SpeedButton, Assembly-CSharp
+        m_MethodName: OnClicked
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
-          m_FloatArgument: 0.5
+          m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &5782889464265417887
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2688630274068061828}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a0a3cd47ecaaa140a7511ab5eea8667, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hotkey: 49
+  button: {fileID: 1276407200784278406}
+  SpeedMod: 0.4
+  imgDefault: {fileID: 21300000, guid: b128c57dc3a28d74eacd51041dc7186d, type: 3}
+  imgSelected: {fileID: 21300000, guid: c88d85e42d7e4e048905b5caf5e1e6eb, type: 3}
 --- !u!1 &2885662133274755655
 GameObject:
   m_ObjectHideFlags: 0
@@ -1370,8 +1406,9 @@ GameObject:
   - component: {fileID: 2443229426987146944}
   - component: {fileID: 4724048755571873925}
   - component: {fileID: 591137354832614418}
+  - component: {fileID: 207264542580287535}
   m_Layer: 5
-  m_Name: DevSpeed3
+  m_Name: Speed3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1480,18 +1517,35 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 4004484315094297824}
-        m_TargetAssemblyTypeName: LevelUI, Assembly-CSharp
-        m_MethodName: DevTrainSpeed
-        m_Mode: 4
+      - m_Target: {fileID: 207264542580287535}
+        m_TargetAssemblyTypeName: SpeedButton, Assembly-CSharp
+        m_MethodName: OnClicked
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
-          m_FloatArgument: 2
+          m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &207264542580287535
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5333846284823568067}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a0a3cd47ecaaa140a7511ab5eea8667, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hotkey: 51
+  button: {fileID: 591137354832614418}
+  SpeedMod: 2
+  imgDefault: {fileID: 21300000, guid: b4ba3d32985712944b31439e681824a0, type: 3}
+  imgSelected: {fileID: 21300000, guid: be8a1ecd80c02e14b8e355f7a1a379a2, type: 3}
 --- !u!1 &5771158481526311112
 GameObject:
   m_ObjectHideFlags: 0
