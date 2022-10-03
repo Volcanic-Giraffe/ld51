@@ -224,7 +224,7 @@ public class GameController : MonoBehaviour
 
     public void PrepareForWave()
     {
-        Sounds.Instance.PlayExact("tododo", 0.3f);
+        Sounds.Instance.PlayExact("bell_uno", 0.3f);
         SpawnStation();
 
         SetMode(GameMode.Build);
@@ -274,7 +274,7 @@ public class GameController : MonoBehaviour
     {
         BuildCursor.SetActive(true);
         SetMode(GameMode.Sort);
-        Sounds.Instance.PlayExact("todododun", 0.3f);
+        Sounds.Instance.PlayExact("bell_quatro", 0.3f);
         _skipAnnouncer = true;
     }
 
