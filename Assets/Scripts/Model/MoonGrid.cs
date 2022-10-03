@@ -12,11 +12,14 @@ public class MoonGrid : MonoBehaviour
 
     public static MoonGrid Instance;
 
-    public int Width;
-    public int FakeWidthToRight;
+    public int UnlockedWidth;
+    public int LockedWidthLeft;
+    public int LockedWidthRight;
     
     public int Height;
 
+    public int Width => LockedWidthLeft + UnlockedWidth + LockedWidthRight;
+    
     public GridCell GridCellPrefab;
     public GridCell[,] Cells => _cells;
 
@@ -25,15 +28,15 @@ public class MoonGrid : MonoBehaviour
         Instance = this;
         _camera = Camera.main;
 
-        _cells = new GridCell[Width + FakeWidthToRight, Height];
-        for (int x = 0; x < Width + FakeWidthToRight; x++)
+        _cells = new GridCell[Width, Height];
+        for (int x = 0; x < Width; x++)
         {
             for (int y = 0; y < Height; y++)
             {
                 var tile = Instantiate(GridCellPrefab, transform);
                 tile.transform.localPosition = new Vector3(x + 0.5f, y + 0.5f, 0);
 
-                if (x >= Width)
+                if (x < LockedWidthLeft || x >= Width - LockedWidthRight)
                 {
                     tile.SetLocked(true);
                 }
@@ -82,7 +85,7 @@ public class MoonGrid : MonoBehaviour
     public GridCell GetCell(Vector2Int xy)
     {
         if (xy.x < 0 || xy.y < 0) return null;
-        if (xy.x >= Width + FakeWidthToRight || xy.y >= Height) return null;
+        if (xy.x >= Width || xy.y >= Height) return null;
         return _cells[xy.x, xy.y];
     }
 
@@ -107,7 +110,7 @@ public class MoonGrid : MonoBehaviour
         {
             for (int y = borderOffset; y < Height - borderOffset; y++)
             {
-                if (!_cells[x, y].Busy) list.Add(_cells[x, y]);
+                if (!_cells[x, y].Busy && !_cells[x,y].Locked) list.Add(_cells[x, y]);
             }
         }
 

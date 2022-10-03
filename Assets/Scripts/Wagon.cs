@@ -35,6 +35,7 @@ public class Wagon : MonoBehaviour
     private float _currentSpeed;
     
     private bool _removed;
+    private bool _exited;
     
     private void Awake()
     {
@@ -114,7 +115,7 @@ public class Wagon : MonoBehaviour
                     //Debug.Log($"prevFrom = {_fromPrevious}, direction={Direction}");
             }
 
-            if (IsFirstWagon())
+            if (IsFirstWagon() && !_exited)
             {
                 _checkedPoints.Clear();
                 var cellsToObstacle = CellsToObstacle(myXY, _fromPrevious, 5);
@@ -139,7 +140,11 @@ public class Wagon : MonoBehaviour
         else
         {
             RemoveFromTrain(RemoveReason.OffTrack);
-            Debug.Log("Strange.....");
+
+            if (!_exited)
+            {
+                Debug.Log("Strange.....");
+            }
             Stop();
             return;
         }
@@ -232,6 +237,12 @@ public class Wagon : MonoBehaviour
     {
         if (_removed) return;
         _removed = true;
+
+        if (_exited)
+        {
+            Destroy(gameObject);
+            return;
+        }
         
         // >>> re-linking is disabled, only tail carts can be removed for good score.
         // if (RearWagon != null) RearWagon.FrontWagon = FrontWagon;
@@ -299,6 +310,27 @@ public class Wagon : MonoBehaviour
 
         return count;
     }
+    
+    public void ExitGrid(RemoveReason reason)
+    {
+        if (_exited) return;
+        
+        _exited = true;
+
+        var colliders = GetComponentsInChildren<Collider>();
+
+        foreach (var cldr in colliders)
+        {
+            cldr.enabled = false;
+        }
+        
+        var effect = RemoveReasons.IsGood(reason) ? RemoveEffectGood : RemoveEffectBad;
+
+        Instantiate(effect, transform.position, Quaternion.identity);
+        
+        Destroy(gameObject, 10f); // unexpected, but just in case
+    }
+
     
     private void RefreshLinks()
     {
