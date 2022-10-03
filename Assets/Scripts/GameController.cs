@@ -111,15 +111,22 @@ public class GameController : MonoBehaviour
                 }
             case GameMode.Sort:
                 {
-                    var thisCell = MoonGrid.Instance.GetCell(xy);
-                    if (thisCell != null && thisCell.HasRoad)
-                    {
-                        if (!_leftMouseWasDown && leftMouseDown)
-                        {
-                            thisCell.Road.ToggleIfCan();
-                        }
-                    }
 
+                    // >>> TOGGLE SWITCHES ONLY
+                    // var thisCell = MoonGrid.Instance.GetCell(xy);
+                    // if (thisCell != null && thisCell.HasRoad)
+                    // {
+                    //     if (!_leftMouseWasDown && leftMouseDown)
+                    //     {
+                    //         thisCell.Road.ToggleIfCan();
+                    //     }
+                    // }
+                    // <<<
+
+                    // >>> FULL RAILS PLACEMENT (INCLUDES SWITCHES TOGGLING)
+                    BuildStyleB(xy, leftMouseDown,rightMouseDown);
+                    // <<<
+                    
                     break;
                 }
         }
