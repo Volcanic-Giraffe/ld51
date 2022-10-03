@@ -9,12 +9,18 @@ public class MenuUI : MonoBehaviour
 {
     [SerializeField] private RectTransform container;
     [SerializeField] private Image overlay;
-
+    [SerializeField] private Button quitButton;
+    
     private bool _shown;
 
     private void Awake()
     {
         _shown = true;
+
+        if (Application.platform == RuntimePlatform.WebGLPlayer)
+        {
+            quitButton.gameObject.SetActive(false);
+        }
     }
 
     public void Show()
@@ -44,5 +50,10 @@ public class MenuUI : MonoBehaviour
         {
             if (_shown) Hide(); else Show();
         }
+    }
+
+    public void OnQuitClicked()
+    {
+        Application.Quit();
     }
 }
