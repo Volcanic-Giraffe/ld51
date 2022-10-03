@@ -466,7 +466,13 @@ public class GameController : MonoBehaviour
     {
         var flyingText = Instantiate(FlyingTextPrefab, position + Vector3.back * 2f, Quaternion.identity);
 
-        // flyingText.transform.LookAt(_camera.transform);
         flyingText.Show(score);
+    }
+    
+    public void ShowFlyingText(Vector3 position, string text, bool good)
+    {
+        var flyingText = Instantiate(FlyingTextPrefab, position + Vector3.back * 2f, Quaternion.identity);
+
+        flyingText.Show(text, good);
     }
 }

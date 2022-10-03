@@ -24,4 +24,14 @@ public class FlyingText : MonoBehaviour
         label.rectTransform.DOAnchorPos(Vector2.up * 1, 0.6f).SetEase(Ease.OutQuart);
         label.DOColor(Color.clear, 0.3f).SetDelay(0.6f);
     }
+    
+    public void Show(string text, bool good)
+    {
+        label.color = good ? colorGood : colorBad;
+
+        label.SetText(text);
+
+        label.rectTransform.DOAnchorPos(Vector2.up * 1, 0.6f).SetEase(Ease.OutQuart);
+        label.DOColor(Color.clear, 0.3f).SetDelay(0.6f);
+    }
 }

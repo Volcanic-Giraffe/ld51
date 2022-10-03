@@ -273,6 +273,8 @@ public class Wagon : MonoBehaviour
         if (!RemoveReasons.IsGood(reason) && WagonType == WagonType.Locomotive)
         {
             GameController.Instance.Stats.AddLife(-1);
+            
+            GameController.Instance.ShowFlyingText(transform.position, "-1♥", false);
         }
 
         Destroy(gameObject);
