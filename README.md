@@ -1,4 +1,4 @@
-Ludum Dare 51 entry made by me in 72 hours.
+Ludum Dare 51 entry made in 72 hours.
 
 Theme: "Every 10 seconds"
 
